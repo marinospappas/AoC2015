@@ -36,14 +36,26 @@ class Day01Test {
     @Test
     @Order(4)
     fun `Solves Part 1`() {
-        val result = solver.solvePart1().also { it.println() }
-        assertThat(result).isEqualTo(12)
+        val inputs = solver.inputData.toList()
+        val expected = listOf(0, 0, 3, 3, 3, -1, -3, -3)
+        for (i in inputs.indices) {
+            solver.inputValue = inputs[i]
+            solver.initialize()
+            val result = solver.solvePart1().also { it.println() }
+            assertThat(result).isEqualTo(expected[i])
+        }
     }
 
     @Test
     @Order(6)
     fun `Solves Part 2`() {
-        val result = solver.solvePart2().also { it.println() }
-        assertThat(result).isEqualTo(12)
+        val inputs = solver.inputData.toList()
+        val expected = listOf(-1, -1, -1, -1, 1, 3, 1, 3)
+        for (i in inputs.indices) {
+            solver.inputValue = inputs[i]
+            solver.initialize()
+            val result = solver.solvePart2().also { it.println() }
+            assertThat(result).isEqualTo(expected[i])
+        }
     }
 }

@@ -3,7 +3,7 @@ package mpdev.springboot.aoc2016.model
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class PuzzleSolution(
-    @JsonProperty("Message")  var message: String = "Advent of Code 2016",
+    @JsonProperty("Message")  var message: String = "Advent of Code 2015",
     @JsonProperty("Day")  var day: Int,
     @JsonProperty("initialisation Time (milli-sec)")  var initTime: Long = 0,
     @JsonProperty("Solution")  var solution: Set<PuzzlePartSolution>

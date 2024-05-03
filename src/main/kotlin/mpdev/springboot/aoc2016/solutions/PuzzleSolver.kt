@@ -13,7 +13,6 @@ abstract class PuzzleSolver(inputDataReader: InputDataReader, val day: Int) {
 
     val inputData: List<String>
 
-
     init {
         inputData = inputDataReader.read(day)
     }
