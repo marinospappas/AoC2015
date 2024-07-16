@@ -29,7 +29,7 @@ class AdventCoinMining(inputDataReader: InputDataReader): PuzzleSolver(inputData
             if (md5Chcksum[0] == byte0 && md5Chcksum[1] == byte0 && md5Chcksum[2] == byte0)
                 return i
         }
-        throw AocException("no solution for day $day part 1")
+        throw AocException("no solution for day $day part 2")
     }
 
     companion object {
