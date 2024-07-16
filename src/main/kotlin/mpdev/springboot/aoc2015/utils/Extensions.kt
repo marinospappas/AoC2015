@@ -122,3 +122,12 @@ fun Set<Long>.lcm(): Long {
     val gcd = this.gcd()
     return this.fold(gcd) { acc, l -> l / gcd * acc }
 }
+
+fun Char.isVowel() = setOf('a', 'e', 'i', 'o', 'u').contains(this)
+
+fun String.containsCharTwiceInARow(): Boolean {
+    for (i in 0 .. this.length-2)
+        if (this[i] == this[i+1])
+            return true
+    return false
+}
