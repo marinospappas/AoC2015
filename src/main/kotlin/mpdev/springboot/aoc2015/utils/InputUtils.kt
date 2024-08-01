@@ -1,5 +1,6 @@
 package mpdev.springboot.aoc2015.utils
 
+import jakarta.el.MethodNotFoundException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import mpdev.springboot.aoc2015.utils.ListType.*
@@ -220,10 +221,13 @@ class InputUtils(inputClazz: Class<*>) {
 
     private fun toEnum(s: String, type: Class<*>): String {
         try {
-            val f: Method = type.getDeclaredMethod("fromString", String::class.java)
+            val f: Method = type.getMethod("fromString", String::class.java)
             return """"${f.invoke(null, s)}""""
-        }
-        catch (e: Exception) {
+        } catch (e: NoSuchMethodException) {
+            throw AocException(
+                "enum class ${type.simpleName} must have static 'fun fromString(s: String)' annotated @JVMStatic in companion object"
+            )
+        } catch (e: Exception) {
             throw AocException(e.stackTraceToString())
         }
     }

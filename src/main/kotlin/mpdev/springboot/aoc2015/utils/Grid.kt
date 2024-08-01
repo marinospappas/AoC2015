@@ -69,6 +69,10 @@ open class Grid<T>(inputGridVisual: List<String> = emptyList(),
         }
     }
 
+    fun fill(datum: T) {
+        data.keys.forEach { key -> data[key] = datum }
+    }
+
     fun getDataPoints() = data.toMap()
     open fun getDataPoint(p: Point) = data[p]
     open fun setDataPoint(p: Point, t: T) {
