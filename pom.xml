@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>mpdev.springboot.aoc2023</groupId>
-	<artifactId>aoc2023</artifactId>
+	<artifactId>aoc2015</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
-	<name>aoc2023r</name>
+	<name>aoc2015</name>
 	<description>Advent of Code</description>
 	<properties>
 		<java.version>17</java.version>

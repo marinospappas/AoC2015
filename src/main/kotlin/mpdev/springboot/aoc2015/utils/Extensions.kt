@@ -125,9 +125,22 @@ fun Set<Long>.lcm(): Long {
 
 fun Char.isVowel() = setOf('a', 'e', 'i', 'o', 'u').contains(this)
 
-fun String.containsCharTwiceInARow(): Boolean {
-    for (i in 0 .. this.length-2)
-        if (this[i] == this[i+1])
-            return true
+fun String.containsSeqTwice(seqLen: Int, gapLen: Int): Boolean {
+    val endIndex = if (gapLen >= 0) this.length - 1 - seqLen - gapLen else this.length - 1 - seqLen
+    for (i in 0 .. endIndex) {
+        val seqToCheck = this.substring(i, i + seqLen)
+        when (gapLen) {
+            // seq repeated twice in a row
+            0 -> if (this.substring(i + seqLen, this.length).startsWith(seqToCheck))
+                return true
+            // seq repeated anywhere in the string (but not overlapping)
+            -1 -> if (this.substring(i + seqLen, this.length).contains(seqToCheck))
+                return true
+            // seq repeated after exactly gapLen chars
+            else -> if (this.substring(i + seqLen + gapLen, this.length).startsWith(seqToCheck))
+                return true
+        }
+
+    }
     return false
 }

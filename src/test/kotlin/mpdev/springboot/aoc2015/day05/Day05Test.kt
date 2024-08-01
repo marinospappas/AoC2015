@@ -2,13 +2,15 @@ package mpdev.springboot.aoc2015.day05
 
 import mpdev.springboot.aoc2015.input.InputDataReader
 import mpdev.springboot.aoc2015.solutions.day05.StringsInspection
-import mpdev.springboot.aoc2015.utils.containsCharTwiceInARow
+import mpdev.springboot.aoc2015.utils.containsSeqTwice
 import mpdev.springboot.aoc2015.utils.isVowel
 import mpdev.springboot.aoc2015.utils.println
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class Day05Test {
 
@@ -37,13 +39,33 @@ class Day05Test {
 
     @Test
     @Order(3)
-    fun `Solves PArt 1 Criteria`() {
+    fun `Solves Part 1 Criteria`() {
         val expected = listOf(true, true, false, false, false)
         for (i in solver.inputData.indices) {
             val s = solver.inputData[i]
-            val result = (s.count { c -> c.isVowel() } >= 3 && s.containsCharTwiceInARow() && !solver.containsUnwanted(s)).also { it.println() }
+            val result = (s.count { c -> c.isVowel() } >= 3 && s.containsSeqTwice(1, 0) && !solver.containsUnwanted(s)).also { it.println() }
             assertThat(result).isEqualTo(expected[i])
         }
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = [
+        "xyxy, true", "aaa, false", "abbccb, false", "aabcdefgaax, true"
+    ])
+    @Order(3)
+    fun `Solves Part 2 Criterion 1`(s: String, expected: Boolean) {
+        val result = (s.containsSeqTwice(2, -1)).also { it.println() }
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = [
+        "xyx, true", "abcdefeghi, true", "aaa, true", "abc, false"
+    ])
+    @Order(3)
+    fun `Solves Part 2 Criterion 2`(s: String, expected: Boolean) {
+        val result = (s.containsSeqTwice(1, 1)).also { it.println() }
+        assertThat(result).isEqualTo(expected)
     }
 
     @Test
@@ -53,10 +75,13 @@ class Day05Test {
         assertThat(result).isEqualTo(2)
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = [
+        "qjhvhtzxzqqjkmpb, true", "xxyxx, true", "uurcxstgmygtbstg, false", "ieodomkazucvgmuy, false"
+    ])
     @Order(6)
-    fun `Solves Part 2`() {
-        val result = solver.solvePart2().also { it.println() }
-        assertThat(result).isEqualTo(111)
+    fun `Solves Part 2`(s: String, expected: Boolean) {
+        val result = (s.containsSeqTwice(2, -1) && s.containsSeqTwice(1, 1)).also { it.println() }
+        assertThat(result).isEqualTo(expected)
     }
 }
