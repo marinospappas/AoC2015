@@ -12,7 +12,7 @@ class Day07Test {
 
     private val day = 7                                    ///////// Update this for a new dayN test
     private lateinit var solver: DigitalCircuit         ///////// Update this for a new dayN test
-    private val inputDataReader = InputDataReader("src/test/resources/inputdata/input")
+    private val inputDataReader = InputDataReader("src/main/resources/inputdata/input")
 
     @BeforeEach
     fun setup() {
