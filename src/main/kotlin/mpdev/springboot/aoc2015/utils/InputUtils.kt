@@ -1,9 +1,10 @@
 package mpdev.springboot.aoc2015.utils
 
-import jakarta.el.MethodNotFoundException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import mpdev.springboot.aoc2015.utils.ListType.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.lang.reflect.Method
 
 /**
@@ -24,6 +25,14 @@ annotation class AocInClass(val delimiters: Array<String> = [" "], val skipLines
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 annotation class AocInReplacePatterns(val patterns: Array<String> = [])
+
+/**
+ * List of patterns to be replaced with the patterns of the second list
+ * the format is: lineMatch1, pattern1, replace1, lineMatch2, pattern2, replace2, ...
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+annotation class AocInReplacePatternsWhenLineMatches(val patterns: Array<String> = [])
 
 /**
  * List of patterns to be removed
@@ -63,10 +72,13 @@ class InputUtils(inputClazz: Class<*>) {
         private var retainedValues: Array<String> = emptyArray()
         var skipEmptyLines: Boolean = true
         var skipLines: Int = 0
+        var DEBUG_INPUT = false
+        val log: Logger = LoggerFactory.getLogger(Companion::class.java)
     }
     private var clazz: Class<*> = inputClazz
     private var delimiters: Array<String> = arrayOf()
     private var replacePatterns: List<Pair<String, String>> = listOf()
+    private var replacePatternsWhenLineMatches: List<Triple<String, String, String>> = listOf()
     private var removePatterns: List<String> = listOf()
     private var retainPatterns: List<String> = listOf()
     private var mappings: List<FieldMapping> = listOf()
@@ -96,6 +108,16 @@ class InputUtils(inputClazz: Class<*>) {
                 ))
             replacePatterns = replaceList
         }
+        if (clazz.isAnnotationPresent(AocInReplacePatternsWhenLineMatches::class.java)) {
+            val replaceList = mutableListOf<Triple<String,String,String>>()
+            for (i in 0 until clazz.getAnnotation(AocInReplacePatternsWhenLineMatches::class.java).patterns.lastIndex step(3))
+                replaceList.add(Triple(
+                    clazz.getAnnotation(AocInReplacePatternsWhenLineMatches::class.java).patterns[i],
+                    clazz.getAnnotation(AocInReplacePatternsWhenLineMatches::class.java).patterns[i+1],
+                    clazz.getAnnotation(AocInReplacePatternsWhenLineMatches::class.java).patterns[i+2]
+                ))
+            replacePatternsWhenLineMatches = replaceList
+        }
         if (clazz.isAnnotationPresent(AocInRetainValues::class.java)) {
             retainPatterns = clazz.getAnnotation(AocInRetainValues::class.java).patterns.toList()
             if (retainedValues.isEmpty())
@@ -123,8 +145,12 @@ class InputUtils(inputClazz: Class<*>) {
     }
 
     // remove noise from input string and convert it to list of values
-    fun transform(s: String): String =
-        s.retainPatterns().removePatterns().replacePatterns().processDelimiters()
+    fun transform(s: String): String {
+        val newStr = s.retainPatterns().replacePatternsWhenLineMatches().removePatterns().replacePatterns().processDelimiters()
+        if (DEBUG_INPUT)
+            log.info("input string [$s] transformed to [$newStr]")
+        return newStr
+    }
 
     private fun String.removePatterns(): String {
         var s1 = this
@@ -138,18 +164,35 @@ class InputUtils(inputClazz: Class<*>) {
         for (i in replacePatterns.indices) {
             if (s1.isEmpty())
                 break
-            var replacement = replacePatterns[i].second
-            if (replacement.contains(Regex("""\$\d"""))) {
-                val match = Regex(""".*\$(\d).*""").find(replacement)
-                try {
-                    val (value) = match!!.destructured
-                    replacement = replacement.replace("$$value", retainedValues[Integer.parseInt(value)-1])
-                    s1 = s1.replace(Regex(replacePatterns[i].first), replacement)
-                } catch (ignore: Exception) {}
-            }
-            else
-                s1 = s1.replace(Regex(replacePatterns[i].first), replacement)
+            s1 = s1.replaceOnePattern(replacePatterns[i])
         }
+        return s1
+    }
+
+    private fun String.replacePatternsWhenLineMatches(): String {
+        var s1 = this
+        for (i in replacePatternsWhenLineMatches.indices) {
+            if (s1.isEmpty())
+                break
+            if (s1.matches(Regex(replacePatternsWhenLineMatches[i].first)))
+                s1 = s1.replaceOnePattern(Pair(replacePatternsWhenLineMatches[i].second, replacePatternsWhenLineMatches[i].third))
+        }
+        return s1
+    }
+
+    private fun String.replaceOnePattern(replacePattern: Pair<String, String>): String {
+        var s1 = this
+        var replacement = replacePattern.second
+        if (replacement.contains(Regex("""\$\d"""))) {
+            val match = Regex(""".*\$(\d).*""").find(replacement)
+            try {
+                val (value) = match!!.destructured
+                replacement = replacement.replace("$$value", retainedValues[Integer.parseInt(value)-1])
+                s1 = s1.replace(Regex(replacePattern.first), replacement)
+            } catch (ignore: Exception) {}
+        }
+        else
+            s1 = s1.replace(Regex(replacePattern.first), replacement)
         return s1
     }
 
