@@ -24,13 +24,12 @@ class DigitalCircuit(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
                 else
                     gatesMap[connections[i]]
         }
-        circuit = gatesMap[circuitRoot] ?: Node("_", Gate.VALUE) //throw AocException("application error 07-002")
+        circuit = gatesMap[circuitRoot] ?: throw AocException("application error 07-002")
     }
 
     fun calculateOutput(node: Node, calculatedOutput: MutableMap<String, Int>): Int {
-        if (calculatedOutput[node.id] != null)
-            return calculatedOutput[node.id]!!
-        println("-> node: ${node.id}")
+        if (calculatedOutput.containsKey(node.id))
+            return calculatedOutput[node.id] ?: throw AocException("application error 07-003")
         val inputValues = Array(2) {0}
         for (i in 0 .. 1)
             inputValues[i] = when (node.inputs[i]) {
@@ -38,17 +37,19 @@ class DigitalCircuit(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
                 is Int -> node.inputs[i] as Int
                 else -> -1
         }
-        val result = node.gate.function(inputValues[0], inputValues[1])
-        calculatedOutput[node.id] = result
-        return result
+        return node.gate.function(inputValues[0], inputValues[1]).also { calculatedOutput[node.id] = it }
     }
 
     override fun solvePart1() = calculateOutput(circuit, mutableMapOf())
 
-    override fun solvePart2() = 0
+    override fun solvePart2(): Int {
+        gatesMap[overrideGate]?.inputs?.set(0, solvePart1())
+        return calculateOutput(circuit, mutableMapOf())
+    }
 
     companion object {
         var circuitRoot = "a"
+        var overrideGate = "b"
     }
 }
 
