@@ -29,7 +29,8 @@ class DigitalCircuit(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
 
     fun calculateOutput(node: Node, calculatedOutput: MutableMap<String, Int>): Int {
         if (calculatedOutput.containsKey(node.id))
-            return calculatedOutput[node.id] ?: throw AocException("application error 07-003")
+            return calculatedOutput[node.id] ?:
+                throw AocException("application error 07-003")
         val inputValues = Array(2) {0}
         for (i in 0 .. 1)
             inputValues[i] = when (node.inputs[i]) {
@@ -53,7 +54,11 @@ class DigitalCircuit(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
     }
 }
 
-data class Node(val id: String, val gate: Gate, var inputs: MutableList<Any?> = mutableListOf(null,null))
+data class Node(val id: String, val gate: Gate, var inputs: MutableList<Any?> = mutableListOf(null,null)) {
+    override fun toString() =
+        "Node - id: $id, $gate, inputs: ${if (inputs[0] is Node) (inputs[0] as Node).id else inputs[0]}" +
+                ", ${if (inputs[1] is Node) (inputs[1] as Node).id else inputs[1]}"
+}
 
 enum class Gate(val function: (Int, Int) -> Int) {
     AND({ a, b -> a.and(b) }),
