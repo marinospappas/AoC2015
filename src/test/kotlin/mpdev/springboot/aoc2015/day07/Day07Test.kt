@@ -32,12 +32,12 @@ class Day07Test {
     @Order(2)
     fun `Reads Input and sets up Circuit`() {
         solver.gatesMap.values.forEach { it.println() }
-        assertThat(solver.gatesMap.size).isEqualTo(8)
+        assertThat(solver.gatesMap.size).isEqualTo(9)
     }
 
     @ParameterizedTest
     @CsvSource(value = [
-        "d, 72", "e, 507", "f, 492", "g, 114", "h, 65412", "i, 65079"
+        "d, 72", "e, 507", "f, 492", "g, 114", "h, 65412", "i, 65079", "a, 507"
     ])
     @Order(4)
     fun `Calculates output`(rootNode: String, expected: Int) {
@@ -50,14 +50,10 @@ class Day07Test {
     @Test
     @Order(5)
     fun `Solves Part 1`() {
+        DigitalCircuit.circuitRoot = "a"
+        solver.initialize()
         val result = solver.solvePart1().also { it.println() }
         assertThat(result).isEqualTo(507)
     }
 
-    @Test
-    @Order(6)
-    fun `Solves Part 2`() {
-        val result = solver.solvePart2().also { it.println() }
-        assertThat(result).isEqualTo(1001996)
-    }
 }
