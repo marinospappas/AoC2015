@@ -1,7 +1,6 @@
 package mpdev.springboot.aoc2015.solutions.day07
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.StructureKind
 import mpdev.springboot.aoc2015.input.InputDataReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.*
@@ -11,11 +10,12 @@ import org.springframework.stereotype.Component
 class DigitalCircuit(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 7) {
 
     lateinit var circuit: Node
+    var gatesMap = mapOf<String, Node>()
 
     override fun initialize() {
         val aocInputList: List<AoCInput> = InputUtils(AoCInput::class.java).readAoCInput(inputData)
         val connectionsMap = aocInputList.map { Pair(it.connectedTo, listOf(it.inputA, it.inputB)) }.associate { it.first to it.second }
-        val gatesMap = aocInputList.associate { it.connectedTo to Node(it.connectedTo, it.gate) }
+        gatesMap = aocInputList.associate { it.connectedTo to Node(it.connectedTo, it.gate) }
         gatesMap.values.forEach { node ->
             val connections = connectionsMap[node.id] ?: throw AocException("application error 07-001")
             for (i in 0..1)
@@ -24,11 +24,26 @@ class DigitalCircuit(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
                 else
                     gatesMap[connections[i]]
         }
-        circuit = gatesMap[circuitRoot] ?: throw AocException("application error 07-002")
-        gatesMap.values.forEach { it.print() }
+        circuit = gatesMap[circuitRoot] ?: Node("_", Gate.VALUE) //throw AocException("application error 07-002")
     }
 
-    override fun solvePart1() = 0
+    fun calculateOutput(node: Node, calculatedOutput: MutableMap<String, Int>): Int {
+        if (calculatedOutput[node.id] != null)
+            return calculatedOutput[node.id]!!
+        println("-> node: ${node.id}")
+        val inputValues = Array(2) {0}
+        for (i in 0 .. 1)
+            inputValues[i] = when (node.inputs[i]) {
+                is Node -> calculateOutput(node.inputs[i] as Node, calculatedOutput)
+                is Int -> node.inputs[i] as Int
+                else -> -1
+        }
+        val result = node.gate.function(inputValues[0], inputValues[1])
+        calculatedOutput[node.id] = result
+        return result
+    }
+
+    override fun solvePart1() = calculateOutput(circuit, mutableMapOf())
 
     override fun solvePart2() = 0
 
@@ -37,21 +52,16 @@ class DigitalCircuit(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
     }
 }
 
-data class Node(val id: String, val gate: Gate, var inputs: MutableList<Any?> = mutableListOf(null,null)) {
-    fun print() {
-        println("Node id: $id, $gate, ${if (inputs[0] is Node) (inputs[0] as Node).id else inputs[0]}" +
-                ", ${if (inputs[1] is Node) (inputs[1] as Node).id else inputs[1]}")
-    }
-}
+data class Node(val id: String, val gate: Gate, var inputs: MutableList<Any?> = mutableListOf(null,null))
 
 enum class Gate(val function: (Int, Int) -> Int) {
     AND({ a, b -> a.and(b) }),
     OR({ a, b -> a.or(b) }),
-    NOT({ _, a -> a.inv() }),
+    NOT({ _, a -> a.inv().and(0xffff) }),
     LSHIFT({ a, b -> a.shl(b) }),
-    RSHIFT({ a, b -> a.ushr(b) }),
+    RSHIFT({ a, b -> a.shr(b).and(0xffff) }),
     DIRECT({ a, _ -> a }),
-    VALUE({ _, _ -> 0 });
+    VALUE({ a, _ -> a });
     companion object {
         @JvmStatic
         fun fromString(str: String) = Gate.valueOf(str)
