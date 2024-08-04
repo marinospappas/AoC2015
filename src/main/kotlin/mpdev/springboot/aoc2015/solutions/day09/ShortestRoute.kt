@@ -16,7 +16,7 @@ class ShortestRoute(inputDataReader: InputDataReader): PuzzleSolver(inputDataRea
         val nodesMap = aocInputList.map { listOf(it.from, it.to) }.flatten().distinct().associateWith { mutableMapOf<String, Int>() }
         aocInputList.forEach { nodesMap[it.from]?.set(it.to, it.distance) }
         nodesMap.forEach { (city, connections) -> graph.addNode(city, connections, true) }
-        // add "Start" node at distance 0 from any node (means the route can start anywhere)
+        // add "Start" node at distance 0 from each node (means the route can start anywhere)
         graph.addNode(START, nodesMap.keys.associateWith { 0 }, true)
     }
 
