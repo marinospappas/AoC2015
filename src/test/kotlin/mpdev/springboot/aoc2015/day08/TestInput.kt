@@ -1,4 +1,4 @@
-package mpdev.springboot.aoc2015.day07
+package mpdev.springboot.aoc2015.day08
 
 object TestInput {
 

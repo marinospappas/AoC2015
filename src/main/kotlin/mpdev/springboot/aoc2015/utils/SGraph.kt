@@ -47,6 +47,10 @@ class SGraph<T>(var nodes: MutableMap<T, MutableMap<T, Int>> = mutableMapOf(),
 
     fun getCost(a:T, b:T) = nodes[a]?.get(b) ?: throw SGraphException("cannot find the cost from [$a] to [$b]")
 
+    fun setCost(a:T, b:T, cost: Int) {
+        nodes[a]?.set(b, cost) ?: throw SGraphException("cannot set the cost from [$a] to [$b]")
+    }
+
     fun removeConnection(edge: Set<T>) {
         nodes[edge.first()]?.remove(edge.last())
         nodes[edge.last()]?.remove(edge.first())
@@ -66,7 +70,7 @@ class SGraph<T>(var nodes: MutableMap<T, MutableMap<T, Int>> = mutableMapOf(),
 
     //TODO: refactor the below function to use Stack instead of recursion
     private fun dfsMaxPath(cur: T, isAtEnd: (T) -> Boolean, visited: MutableMap<T, Int>): Int? {
-        if (isAtEnd(cur)) {
+        if (isAtEnd(cur) && visited.isNotEmpty()) {
             return visited.values.sum()
         }
         var maxPath: Int? = null
