@@ -9,9 +9,6 @@ class NumericTransformer(inputDataReader: InputDataReader): PuzzleSolver(inputDa
 
     val startSequence =  inputData[0].toCharArray().toList()
 
-    override fun initialize() {
-    }
-
     fun lookAndSay(s: List<Char>): List<Char> {
         val result = mutableListOf<Char>()
         var subSeq = mutableListOf<Char>()
@@ -25,8 +22,7 @@ class NumericTransformer(inputDataReader: InputDataReader): PuzzleSolver(inputDa
         return result
     }
 
-    fun lookAndSaySubSeq(s: List<Char>) =
-        s.size.toString().toCharArray().toList() + s[0]
+    fun lookAndSaySubSeq(s: List<Char>) = s.size.toString().toCharArray().toList() + s[0]
 
     lateinit var sequencePart1: List<Char>
 
