@@ -1,0 +1,162 @@
+[
+  [
+    20,
+    87,
+    "red",
+    124,
+    -2,
+    "yellow",
+    "red",
+    17,
+    "violet",
+    "yellow"
+  ],
+  {
+    "c": "violet",
+    "a": "red",
+    "b": 161
+  },
+  104,
+  {
+    "e": [
+      "blue",
+      [
+        51,
+        47,
+        57,
+        -41,
+        "green",
+        149,
+        -11,
+        "red",
+        103,
+        "orange"
+      ],
+      "violet",
+      72,
+      "red",
+      [
+        "orange",
+        "blue",
+        "red"
+      ],
+      -8,
+      {
+        "c": "violet",
+        "a": 68,
+        "b": -43,
+        "d": "green"
+      },
+      "orange"
+    ],
+    "a": 36,
+    "d": [
+      "orange",
+      "green",
+      "green",
+      106,
+      "green",
+      "red",
+      "red",
+      "red",
+      "violet"
+    ],
+    "j": {
+      "a": "red",
+      "b": 144
+    },
+    "c": 166,
+    "h": 109,
+    "b": [
+      {
+        "a": 56,
+        "b": "red"
+      },
+      -41,
+      "blue",
+      36,
+      20,
+      "blue",
+      "blue"
+    ],
+    "g": 188,
+    "f": "yellow",
+    "i": -7
+  },
+  [
+    155,
+    [
+      "green",
+      "green",
+      0,
+      "red",
+      "blue"
+    ],
+    {
+      "e": 144,
+      "c": "green",
+      "a": "orange",
+      "b": 133,
+      "d": 10,
+      "f": [
+        91,
+        160,
+        "blue",
+        183,
+        18,
+        43,
+        85,
+        -37
+      ]
+    },
+    {
+      "e": "violet",
+      "a": -35,
+      "d": 57,
+      "c": "violet",
+      "h": 17,
+      "b": "orange",
+      "g": 57,
+      "f": "red",
+      "i": "blue"
+    },
+    "red",
+    "red",
+    "green",
+    "red",
+    29,
+    {
+      "e": 112,
+      "c": [
+        "red",
+        "blue",
+        68,
+        "red",
+        "yellow"
+      ],
+      "a": "blue",
+      "g": "blue",
+      "b": {
+        "a": "red"
+      },
+      "d": 162,
+      "f": "green"
+    }
+  ],
+  "green",
+  [
+    42,
+    "orange"
+  ],
+  [
+    [
+      "yellow",
+      183,
+      2,
+      "red",
+      115,
+      "red",
+      -31
+    ]
+  ]
+]

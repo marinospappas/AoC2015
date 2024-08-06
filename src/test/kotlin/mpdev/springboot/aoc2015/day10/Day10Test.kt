@@ -28,7 +28,7 @@ class Day10Test {
 
     @Test
     @Order(2)
-    fun `Executes Look and Tell`() {
+    fun `Executes Look and Say`() {
         val expected = listOf("312211", "11", "21",  "1211", "111221")
         for (i in solver.inputData.indices) {
             val result = solver.lookAndSay(solver.inputData[i].toCharArray().toList()).also { it.println() }

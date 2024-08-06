@@ -7,14 +7,14 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.system.measureTimeMillis
 
-abstract class PuzzleSolver(inputDataReader: InputDataReader, val day: Int) {
+abstract class PuzzleSolver(inputDataReader: InputDataReader, val day: Int, inputFileExtension: String = "txt") {
 
     protected val log: Logger = LoggerFactory.getLogger(this::class.java)
 
     val inputData: List<String>
 
     init {
-        inputData = inputDataReader.read(day)
+        inputData = inputDataReader.read(day, inputFileExtension)
     }
 
     fun solve(): PuzzleSolution {
