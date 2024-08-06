@@ -38,6 +38,6 @@ class JsonProcessor(inputDataReader: InputDataReader): PuzzleSolver(inputDataRea
     override fun solvePart2(): Int {
         numericSum = 0
         processJsonIntFields(jsonInput, true)
-        return numericSum    }
-
+        return numericSum
+    }
 }
