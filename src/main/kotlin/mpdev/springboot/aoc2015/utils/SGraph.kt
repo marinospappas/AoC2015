@@ -64,20 +64,21 @@ class SGraph<T>(var nodes: MutableMap<T, MutableMap<T, Int>> = mutableMapOf(),
         }
     }
 
-    fun longestPathDfs(start: T, isAtEnd: (T) -> Boolean): Int {
-        return dfsMaxPath(start, isAtEnd, mutableMapOf())
+    fun longestPathDfs(start: T, includeAllNodes: Boolean = true, isAtEnd: (T) -> Boolean): Int {
+        return dfsMaxPath(start, isAtEnd, mutableMapOf(), includeAllNodes)
     }
 
     //TODO: refactor the below function to use Stack instead of recursion
-    private fun dfsMaxPath(cur: T, isAtEnd: (T) -> Boolean, visited: MutableMap<T, Int>): Int {
-        if (isAtEnd(cur) && visited.isNotEmpty()) {
+    private fun dfsMaxPath(cur: T, isAtEnd: (T) -> Boolean, visited: MutableMap<T, Int>, includeAllNodes: Boolean): Int {
+        if (isAtEnd(cur) &&
+            if (includeAllNodes) visited.size == nodes.size else visited.isNotEmpty()) {
             return visited.values.sum()
         }
         var maxPath = Int.MIN_VALUE
         getConnected(cur).forEach { (neighbor, steps) ->
             if (neighbor !in visited) {
                 visited[neighbor] = steps
-                val res = dfsMaxPath(neighbor, isAtEnd, visited)
+                val res = dfsMaxPath(neighbor, isAtEnd, visited, includeAllNodes)
                 if (res > maxPath) {
                     maxPath = res
                 }
@@ -92,8 +93,7 @@ class SGraph<T>(var nodes: MutableMap<T, MutableMap<T, Int>> = mutableMapOf(),
         inline fun <reified T: Comparable<T>> of(g: SGraph<T>): SGraph<T> {
             val newGraph = SGraph<T>()
             for ((id, connxns) in g.nodes) {
-                for ((connId, cost) in connxns)
-                    newGraph.addNode(id, mapOf(connId to cost))
+                newGraph.addNode(id, connxns.toMap())
             }
             return newGraph
         }

@@ -61,7 +61,7 @@ enum class ListType { string, int, long, pair, list, point }
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD)
-annotation class AocInField(val fieldId: Int, val delimiters:  Array<String> = [","],
+annotation class AocInField(val fieldId: Int = 0, val delimiters:  Array<String> = [","],
                             val listType: Array<ListType> = [string])
                             // list type and delimiter 0 valid only for List, delimiters 1 and above valid only for list of collection
 
