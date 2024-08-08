@@ -27,12 +27,20 @@ annotation class AocInClass(val delimiters: Array<String> = [" "], val skipLines
 annotation class AocInReplacePatterns(val patterns: Array<String> = [])
 
 /**
- * List of patterns to be replaced with the patterns of the second list
+ * List of patterns to be replaced with the patterns of the second list when the line matches a pattern
  * the format is: lineMatch1, pattern1, replace1, lineMatch2, pattern2, replace2, ...
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 annotation class AocInReplacePatternsWhenLineMatches(val patterns: Array<String> = [])
+
+/**
+ * List of patterns the FIRST occurrence of which will be replaced with the patterns of the second list
+ * the format is: lineMatch1, pattern1, replace1, lineMatch2, pattern2, replace2, ...
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+annotation class AocInReplaceFirst(val patterns: Array<String> = [])
 
 /**
  * List of patterns to be removed
@@ -78,6 +86,7 @@ class InputUtils(inputClazz: Class<*>) {
     private var clazz: Class<*> = inputClazz
     private var delimiters: Array<String> = arrayOf()
     private var replacePatterns: List<Pair<String, String>> = listOf()
+    private var replaceFirstPatterns: List<Pair<String, String>> = listOf()
     private var replacePatternsWhenLineMatches: List<Triple<String, String, String>> = listOf()
     private var removePatterns: List<String> = listOf()
     private var retainPatterns: List<String> = listOf()
@@ -107,6 +116,15 @@ class InputUtils(inputClazz: Class<*>) {
                     clazz.getAnnotation(AocInReplacePatterns::class.java).patterns[i+1]
                 ))
             replacePatterns = replaceList
+        }
+        if (clazz.isAnnotationPresent(AocInReplaceFirst::class.java)) {
+            val replaceList = mutableListOf<Pair<String,String>>()
+            for (i in 0 until clazz.getAnnotation(AocInReplaceFirst::class.java).patterns.lastIndex step(2))
+                replaceList.add(Pair(
+                    clazz.getAnnotation(AocInReplaceFirst::class.java).patterns[i],
+                    clazz.getAnnotation(AocInReplaceFirst::class.java).patterns[i+1]
+                ))
+            replaceFirstPatterns = replaceList
         }
         if (clazz.isAnnotationPresent(AocInReplacePatternsWhenLineMatches::class.java)) {
             val replaceList = mutableListOf<Triple<String,String,String>>()
@@ -146,7 +164,7 @@ class InputUtils(inputClazz: Class<*>) {
 
     // remove noise from input string and convert it to list of values
     fun transform(s: String): String {
-        val newStr = s.retainPatterns().replacePatternsWhenLineMatches().removePatterns().replacePatterns().processDelimiters()
+        val newStr = s.retainPatterns().replacePatternsWhenLineMatches().removePatterns().replaceFirstPatterns().replacePatterns().processDelimiters()
         if (DEBUG_INPUT)
             log.info("input string [$s] transformed to [$newStr]")
         return newStr
@@ -156,6 +174,16 @@ class InputUtils(inputClazz: Class<*>) {
         var s1 = this
         for (pattern in removePatterns)
             s1 = s1.replace(Regex(pattern), "")
+        return s1
+    }
+
+    private fun String.replaceFirstPatterns(): String {
+        var s1 = this
+        for (i in replaceFirstPatterns.indices) {
+            if (s1.isEmpty())
+                break
+            s1 = s1.replaceFirst(replaceFirstPatterns[i].first, replaceFirstPatterns[i].second)
+        }
         return s1
     }
 
