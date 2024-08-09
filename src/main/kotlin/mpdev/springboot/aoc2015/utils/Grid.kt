@@ -1,5 +1,7 @@
 package mpdev.springboot.aoc2015.utils
 
+import mpdev.springboot.aoc2015.utils.GridUtils.Direction.*
+
 open class Grid<T>(inputGridVisual: List<String> = emptyList(),
                    private val mapper: Map<Char,T> = emptyMap(),
                    private val border: Int = 1,
@@ -12,6 +14,7 @@ open class Grid<T>(inputGridVisual: List<String> = emptyList(),
     protected var minX: Int = 0
     protected var minY: Int = 0
     protected var DEFAULT_CHAR: Char
+    protected var cornerPoints: Set<Point> = setOf()
 
     init {
         if (inputGridVisual.isNotEmpty()) {
@@ -67,6 +70,7 @@ open class Grid<T>(inputGridVisual: List<String> = emptyList(),
         else {
             maxX = 0; maxY = 0; minX = 0; minY = 0
         }
+        cornerPoints = setOf(Point(minX, minY), Point(minX, maxY), Point(maxX, minY), Point(maxX, maxY))
     }
 
     fun fill(datum: T) {
@@ -78,6 +82,15 @@ open class Grid<T>(inputGridVisual: List<String> = emptyList(),
     open fun setDataPoint(p: Point, t: T) {
         data[p] = t
     }
+    open fun containsDataPoint(p: Point) = data.containsKey(p)
+
+    open fun getAdjacent(p: Point, includeDiagonals: Boolean = false): Set<Point> {
+        val cardinal = setOf(UP, RIGHT, DOWN, LEFT).map { p + it.increment }.toSet()
+        val diagonals = setOf(Point(1,1), Point(-1,1), Point(1,-1), Point(-1,-1))
+            .map { p + it }.toSet()
+        return if (includeDiagonals) cardinal + diagonals else cardinal
+    }
+
     open fun removeDataPoint(p: Point) {
         data.remove(p)
     }
@@ -110,6 +123,7 @@ open class Grid<T>(inputGridVisual: List<String> = emptyList(),
 
     fun getDimensions() = Pair(maxX-minX+1, maxY-minY+1)
     fun getMinMaxXY() = FourComponents(minX, maxX, minY, maxY)
+    fun getCorners() = cornerPoints.toSet()
     fun countOf(item: T) = data.values.count { it == item }
 
     fun firstPoint() = Point(minX,minY)
