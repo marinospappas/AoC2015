@@ -1,10 +1,15 @@
-package mpdev.springboot.aoc2015.utils
+package mpdev.springboot.aoc2015.utils.aocvm
 
 import kotlinx.coroutines.channels.Channel
-import mpdev.springboot.aoc2015.utils.InstructionSet.Companion.getOpCode
-import mpdev.springboot.aoc2015.utils.OpResultCode.*
+import mpdev.springboot.aoc2015.utils.AocException
+import mpdev.springboot.aoc2015.utils.aocvm.InstructionSet.Companion.getOpCode
+import mpdev.springboot.aoc2015.utils.aocvm.OpResultCode.*
+import mpdev.springboot.aoc2015.utils.aocvm.ProgramState.*
 
-class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = listOf(), val debug: Boolean = false) {
+class Program(prog: List<String>, val ioChannel: List<Channel<Long>> = listOf(), val debug: Boolean = false) {
+
+    var programState: ProgramState = READY
+    var instanceName = ""
 
     private val instructionList: MutableList< Pair<InstructionSet.OpCode, List<Any>> > = if (prog[0].equals("#test", true))
         mutableListOf()
@@ -36,6 +41,14 @@ class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = l
     }
 
     fun getRegister(reg: String): Long = registers.getOrPut(reg) { 0 }
+    fun setRegister(reg: String, value: Long) {
+        registers[reg] = value
+    }
+
+    fun getMemory(address: Int) = getRegister(address.toString())
+    fun setMemory(address: Int, value: Long) {
+        setRegister(address.toString(), value)
+    }
 
     private fun valueOf(s: Any) =
         when (s) {
@@ -61,4 +74,6 @@ class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = l
     }
 }
 
-
+enum class ProgramState {
+    READY, RUNNING, WAIT, COMPLETED
+}
