@@ -1,80 +1,64 @@
 package mpdev.springboot.aoc2015.utils
 
 import kotlinx.coroutines.channels.Channel
-import mpdev.springboot.aoc2015.utils.Instruction.*
-import mpdev.springboot.aoc2015.utils.Instruction.Companion.toggle
+import mpdev.springboot.aoc2015.utils.InstructionSet.Companion.getOpCode
+import mpdev.springboot.aoc2015.utils.OpResultCode.*
 
-class Program(prog: List<String>, private val outputChannel: Channel<Int> = Channel()) {
+class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = listOf(), val debug: Boolean = false) {
 
-    val instructionList: MutableList< Triple<Instruction, Any, Any> >  = if (prog[0].equals("#test", true))
+    private val instructionList: MutableList< Pair<InstructionSet.OpCode, List<Any>> > = if (prog[0].equals("#test", true))
         mutableListOf()
     else
-        prog.map { it.split(" ") }.map { it + ""  + ""}
-            .map { Triple(Instruction.fromString(it[0]), it[1].toIntOrString(), it[2].toIntOrString()) }
+        prog.map { it.split(",") }
+            .map { Pair(getOpCode(it[0]), it.subList(1, it.size).map { v -> v.toIntOrString() }) }
             .toMutableList()
-    private val registers = mutableMapOf<String,Int>()
 
-    suspend fun run(initReg: Map<String,Int> = emptyMap(), maxCount: Int = Int.MAX_VALUE) {
+    private val registers = mutableMapOf<String,Long>()
+
+    suspend fun run(initReg: Map<String, Long> = emptyMap(), maxCount: Int = Int.MAX_VALUE) {
         var pc = 0
         var outputCount = 0
         registers.clear()
         initReg.forEach { (reg, v) -> registers[reg] = v }
         while (pc <= instructionList.lastIndex && outputCount < maxCount) {
-            val (instr, reg, param) = instructionList[pc]
-            when (instr) {
-                CPY -> if (param is String) registers[param] = valueOf(reg)  // reg and param are reversed in cpy instruction
-                INC -> registers[reg.toString()] = registers.getOrPut(reg.toString()) { 0 } + 1
-                DEC -> registers[reg.toString()] = registers.getOrPut(reg.toString()) { 0 } - 1
-                MUL -> registers[reg.toString()] = valueOf(reg) * valueOf(param)
-                JNZ -> if (valueOf(reg) != 0) pc += valueOf(param) - 1
-                TGL -> if (pc + valueOf(reg) < instructionList.size) {
-                    val curInstr = instructionList[pc + valueOf(reg)]
-                    instructionList[pc + valueOf(reg)] = Triple(toggle(curInstr.first), curInstr.second, curInstr.third)
-                    println("TGL: instr $curInstr was changed to ${instructionList[pc + valueOf(reg)]}")
-                }
-                OUT -> { outputChannel.send(valueOf(reg)); ++outputCount }
-                NOP -> {}
+            val (instr, params) = instructionList[pc]
+            val (resCode, values) = instr.execute(mapParams(params, instr.paramMode, instr.numberOfParams))
+            when (resCode) {
+                SET_MEMORY -> registers[values[0] as String] = valueOf(values[1])
+                INCR_PC -> pc += valueOf(values[0]).toInt() - 1
+                OUTPUT -> { ioChannel[1].send(valueOf(values[0])); ++outputCount }
+                INPUT -> { registers[values[0] as String] = ioChannel[0].receive() }
+                EXIT -> break
+                NONE -> {}
             }
             ++pc
         }
     }
 
-    fun getRegister(reg: String): Int = registers.getOrPut(reg) { 0 }
+    fun getRegister(reg: String): Long = registers.getOrPut(reg) { 0 }
 
     private fun valueOf(s: Any) =
         when (s) {
-            is Int -> s
+            is Int -> s.toLong()
+            is Long -> s
             is String -> registers.getOrPut(s) { 0 }
             else -> throw AocException("unexpected error PROG001 [$s]")
         }
 
-    private fun String.toIntOrString() =
-        try {
+    private fun String.toIntOrString() = try {
             this.toInt()
+        } catch (e: Exception) {
+            this
         }
-        catch (e: Exception) { this }
-}
 
-enum class Instruction(val value: String) {
-    CPY("cpy"),
-    INC("inc"),
-    DEC("dec"),
-    MUL("mul"),
-    JNZ("jnz"),
-    TGL("tgl"),
-    OUT("out"),
-    NOP("nop");
-    companion object {
-        fun toggle(instr: Instruction) = when(instr) {
-            INC -> DEC
-            DEC, TGL, OUT -> INC
-            JNZ -> CPY
-            CPY -> JNZ
-            MUL -> MUL
-            NOP -> NOP
+    private fun mapParams(params: List<Any>, paramMode: List<ParamReadWrite>, numberOfParams: Int): List<Any> {
+        val newParams = mutableListOf<Any>()
+        val thisParams = if (numberOfParams > params.size) params + params[0] else params
+        thisParams.indices.forEach { i ->
+            newParams.add(if (paramMode[i] == ParamReadWrite.R) valueOf(thisParams[i]) else thisParams[i])
         }
-        fun fromString(str: String): Instruction {
-            return Instruction.values().firstOrNull { it.value == str } ?: throw AocException("no operation found for [$str]")
-        }
+        return newParams
     }
 }
+
+
