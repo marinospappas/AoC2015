@@ -26,7 +26,7 @@ abstract class InstructionSet {
             SUB to OpCode(SUB, 3, listOf(R, R, W)) { a -> Pair(SET_MEMORY, listOf(a[2], a[0] as Long - a[1] as Long)) },
             INC to OpCode(INC, 2, listOf(R, W)) { a -> Pair(SET_MEMORY, listOf(a[1], a[0] as Long + 1L)) },
             JMP to OpCode(JMP, 1, listOf(R)) { a -> Pair(INCR_PC, listOf(a[0] as Long)) },
-            JNZ to OpCode(JNZ, 2, listOf(R, R)) { a -> Pair(INCR_PC, listOf(if (a[0] as Long == 0L) a[1] as Long else 1L)) },
+            JNZ to OpCode(JNZ, 2, listOf(R, R)) { a -> if (a[0] as Long == 0L) Pair(INCR_PC, listOf(a[1] as Long)) else Pair(EXIT, listOf()) },
             IN to OpCode(IN, 1, listOf(W)) { a -> Pair(INPUT, listOf(a[0])) },
             OUT to OpCode(OUT, 1, listOf(R)) { a -> Pair(OUTPUT, listOf(a[0] as Long)) },
             NOP to OpCode(NOP, 0, listOf()) { a -> Pair(NONE, listOf()) },

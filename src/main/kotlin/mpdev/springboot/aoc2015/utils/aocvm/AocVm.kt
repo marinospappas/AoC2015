@@ -39,7 +39,7 @@ open class AocVm(aocProgram: List<String>,
 
     suspend fun waitProgram(job: Job) {
         waitAocProgram(job)
-        log.info("AoCProg instance [0] completed")
+        log.info("AocProg instance [0] completed")
     }
 
     fun setProgramMemory(address: Int, data: Long) {
