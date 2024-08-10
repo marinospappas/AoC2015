@@ -3,7 +3,8 @@ package mpdev.springboot.aoc2015.utils.aocvm
 import kotlinx.coroutines.Job
 
 open class AocVm(aocProgram: List<String>,
-                 instanceNamePrefix: String = DEF_PROG_INSTANCE_PREFIX): AbstractAocVm() {
+                 instanceNamePrefix: String = DEF_PROG_INSTANCE_PREFIX,
+                 debug: Boolean = false): AbstractAocVm() {
 
     private var mainInstance: Program
 
@@ -11,7 +12,7 @@ open class AocVm(aocProgram: List<String>,
         // clears the instance table and creates the first instance of the AocCode program
         if (instanceTable.isNotEmpty())
             instanceTable.clear()
-        instanceTable.add(Program(aocProgram))
+        instanceTable.add(Program(aocProgram, listOf(ioChannels[0].first, ioChannels[0].second), debug))
         mainInstance = instanceTable[0]
         mainInstance.instanceName = "$instanceNamePrefix-0"
         log.info("AocCode instance [0] configured")

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component
 @Component
 class Computer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 23) {
 
-    lateinit var program: Program
     lateinit var aocVm: AocVm
 
     override fun initialize() {
@@ -26,15 +25,17 @@ class Computer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 
             { a -> Pair(OpResultCode.INCR_PC, listOf(if (a[0] as Long % 2L == 0L) a[1] as Long else 1L)) }
         InstructionSet.opCodesList["jio"] = InstructionSet.OpCode("jio", 2, listOf(R, R))
             { a -> Pair(OpResultCode.INCR_PC, listOf(if (a[0] as Long == 1L) a[1] as Long else 1L)) }
-        aocVm = AocVm(inputData.map { it.replace(", ", ",").replace(" ", ",") })
+        aocVm = AocVm(inputData.toMutableList().also { it.add(0, "in a") } .also { it.add("out b") }
+            .map { it.replace(", ", ",").replace(" ", ",") })
     }
 
     override fun solvePart1(): Int {
         var result: Int
         runBlocking {
+            aocVm.sendInputToProgram(0)
             val job = launch { aocVm.runProgram() }
             aocVm.waitProgram(job)
-            result = aocVm.getProgramRegister("b")
+            result = aocVm.getOutputFromProgram().last()
         }
         return result
     }
@@ -42,7 +43,8 @@ class Computer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 
     override fun solvePart2(): Int {
         var result: Int
         runBlocking {
-            val job = launch { aocVm.runProgram(mapOf("a" to 1)) }
+            aocVm.sendInputToProgram(1)
+            val job = launch { aocVm.runProgram() }
             aocVm.waitProgram(job)
             result = aocVm.getProgramRegister("b")
         }

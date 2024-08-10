@@ -5,9 +5,12 @@ import mpdev.springboot.aoc2015.utils.AocException
 import mpdev.springboot.aoc2015.utils.aocvm.InstructionSet.Companion.getOpCode
 import mpdev.springboot.aoc2015.utils.aocvm.OpResultCode.*
 import mpdev.springboot.aoc2015.utils.aocvm.ProgramState.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-class Program(prog: List<String>, val ioChannel: List<Channel<Long>> = listOf(), val debug: Boolean = false) {
+class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = listOf(), val debug: Boolean = false) {
 
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
     var programState: ProgramState = READY
     var instanceName = ""
 
@@ -27,7 +30,12 @@ class Program(prog: List<String>, val ioChannel: List<Channel<Long>> = listOf(),
         initReg.forEach { (reg, v) -> registers[reg] = v }
         while (pc <= instructionList.lastIndex && outputCount < maxCount) {
             val (instr, params) = instructionList[pc]
-            val (resCode, values) = instr.execute(mapParams(params, instr.paramMode, instr.numberOfParams))
+            val mappedParams = mapParams(params, instr.paramMode, instr.numberOfParams)
+            if (debug)
+                log.info("pc: $pc instruction: ${instr.code} $mappedParams")
+            val (resCode, values) = instr.execute(mappedParams)
+            if (debug)
+                log.info("    result: $resCode $values")
             when (resCode) {
                 SET_MEMORY -> registers[values[0] as String] = valueOf(values[1])
                 INCR_PC -> pc += valueOf(values[0]).toInt() - 1
