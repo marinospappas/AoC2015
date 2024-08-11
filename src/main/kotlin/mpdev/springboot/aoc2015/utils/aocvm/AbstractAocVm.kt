@@ -17,7 +17,7 @@ abstract class AbstractAocVm {
         // the AoCVM "process table"
         val instanceTable = mutableListOf<Program>()
         // the AoC input/output channels
-        val ioChannels = Array<Pair<Channel<Long>, Channel<Long>>>(50)
+        val ioChannels = Array<Pair<Channel<Long>, Channel<Long>>>(INSTANCE_TABLE_SIZE)
             { Pair(Channel(Channel.UNLIMITED), Channel(Channel.UNLIMITED)) }
     }
 

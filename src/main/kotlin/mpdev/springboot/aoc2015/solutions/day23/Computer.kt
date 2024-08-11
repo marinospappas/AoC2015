@@ -14,14 +14,13 @@ import org.springframework.stereotype.Component
 class Computer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 23) {
 
     lateinit var aocVm: AocVm
-    var debug = false
 
     override fun initialize() {
         initialiseOpCodes()
         aocVm = AocVm(inputData
-            .toMutableList().also { it.add(0, "in a") } .also { it.add("out b") }
-            .map { it.replace(", ", ",").replace(" ", ",") },
-            debug = debug)
+            .toMutableList().also { it.add(0, "in a") }.also { it.add("out b") }
+            .map { it.replace(", ", ",").replace(" ", ",") }
+        )
     }
 
     override fun solvePart1(): Int {
