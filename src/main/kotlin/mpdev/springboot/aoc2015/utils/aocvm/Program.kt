@@ -17,7 +17,7 @@ class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = l
     private val instructionList: MutableList< Pair<InstructionSet.OpCode, List<Any>> > = if (prog[0].equals("#test", true))
         mutableListOf()
     else
-        prog.map { it.split(",") }
+        prog.map { it.split(" ") }
             .map { Pair(getOpCode(it[0]), it.subList(1, it.size).map { v -> v.toIntOrString() }) }
             .toMutableList()
 
@@ -38,7 +38,7 @@ class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = l
                 SET_MEMORY -> registers[values[0] as String] = valueOf(values[1])
                 INCR_PC -> pc += valueOf(values[0]).toInt() - 1
                 OUTPUT -> {
-                    log.debug("AocProg {} writing to output {}", instanceName, values[0])
+                    log.info("AocProg {} writing to output {}", instanceName, values[0])
                     ioChannel[1].send(valueOf(values[0]))
                     ++outputCount
                 }
@@ -51,6 +51,7 @@ class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = l
                     programState = RUNNING
                     log.debug("AocProg {} received input {} to be stored in {}", instanceName, inputValue, values[0])
                 }
+                CUSTOM -> (values[0] as CustomOpCode).execute(instructionList, pc, values)
                 EXIT -> break
                 NONE -> {}
             }
