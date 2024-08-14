@@ -14,16 +14,23 @@ class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = l
     var programState: ProgramState = READY
     var instanceName = ""
 
-    private val instructionList: MutableList< Pair<InstructionSet.OpCode, List<Any>> > = if (prog[0].equals("#test", true))
-        mutableListOf()
+    private val sourcePgmOptions: Map<String, String> =
+        if (prog.isNotEmpty() && prog[0].startsWith("#!"))
+            prog[0].substring(2).split(",").map { it.split("=") }.associate { it[0] to it[1] }
     else
-        prog.map { it.split(" ") }
-            .map { Pair(getOpCode(it[0]), it.subList(1, it.size).map { v -> v.toIntOrString() }) }
-            .toMutableList()
+        emptyMap()
+
+    private val instructionList: MutableList< Pair<InstructionSet.OpCode, List<Any>> > = prog.asSequence()
+        .filterNot { it.startsWith('#') || it.isEmpty() }
+        .map { it.substring(if (sourcePgmOptions["indent"] == null) 0 else sourcePgmOptions["indent"]?.toInt()!!) }
+        .map { it.split(" ") }
+        .map { Pair(getOpCode(it[0]), it.subList(1, it.size).map { v -> v.toIntOrString() }) }
+        .toMutableList()
 
     private val registers = mutableMapOf<String,Long>()
 
     suspend fun run(initReg: Map<String, Long> = emptyMap(), maxCount: Int = Int.MAX_VALUE) {
+        log.debug("$instanceName starting, init registers: $initReg")
         var pc = 0
         var outputCount = 0
         registers.clear()
@@ -31,14 +38,14 @@ class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = l
         while (pc <= instructionList.lastIndex && outputCount < maxCount) {
             val (instr, params) = instructionList[pc]
             val mappedParams = mapParams(params, instr.paramMode, instr.numberOfParams)
-            log.debug("pc: $pc instruction: ${instr.code} $mappedParams")
+            log.debug("$instanceName pc: $pc instruction: ${instr.code} $mappedParams")
             val (resCode, values) = instr.execute(mappedParams)
-            log.debug("    result: $resCode $values")
+            log.debug("$instanceName     result: $resCode $values")
             when (resCode) {
                 SET_MEMORY -> registers[values[0] as String] = valueOf(values[1])
                 INCR_PC -> pc += valueOf(values[0]).toInt() - 1
                 OUTPUT -> {
-                    log.info("AocProg {} writing to output {}", instanceName, values[0])
+                    log.debug("AocProg {} writing to output {}", instanceName, values[0])
                     ioChannel[1].send(valueOf(values[0]))
                     ++outputCount
                 }
@@ -75,7 +82,7 @@ class Program(prog: List<String>, private val ioChannel: List<Channel<Long>> = l
             is Int -> s.toLong()
             is Long -> s
             is String -> registers.getOrPut(s) { 0 }
-            else -> throw AocException("unexpected error PROG001 [$s]")
+            else -> throw AocException("$instanceName unexpected error PROG001 [$s]")
         }
 
     private fun String.toIntOrString() = try {

@@ -2,37 +2,33 @@ package mpdev.springboot.aoc2015.utils.aocvm
 
 import kotlinx.coroutines.Job
 
-open class AocVm(aocProgram: List<String>,
-                 instanceNamePrefix: String = DEF_PROG_INSTANCE_PREFIX): AbstractAocVm() {
+open class AocVm(instructionList: List<String>, instanceNamePrefix: String = DEF_PROG_INSTANCE_PREFIX):
+    AbstractAocVm(instructionList, instanceNamePrefix) {
 
-    private var mainInstance: Program
+    fun newProgram(instructionList: List<String>) = setupNewInstance(instructionList)
 
-    init {
-        // clears the instance table and creates the first instance of the AocCode program
-        if (instanceTable.isNotEmpty())
-            instanceTable.clear()
-        instanceTable.add(Program(aocProgram, listOf(ioChannels[0].first, ioChannels[0].second)))
-        mainInstance = instanceTable[0]
-        mainInstance.instanceName = "$instanceNamePrefix-0"
-        log.info("AocCode instance [0] configured")
+    fun aocCtl(cmd: AocCmd, value: Any, programId: Int = 0) {
+        aocCtl(programId, cmd, value)
     }
 
-    suspend fun runProgram(initReg: Map<String, Long> = emptyMap()) {
-        log.info("AocCode instance [0] starting")
-        runAocProgram(0, initReg)
+    suspend fun runProgram(initReg: Map<String, Long> = emptyMap(), programId: Int = 0) {
+        log.info("AocCode instance [$programId] starting")
+        runAocProgram(programId, initReg)
     }
 
-    suspend fun sendInputToProgram(data: Int) {
-        setAocProgramInputLong(listOf(data.toLong()), 0)
+    suspend fun sendInputToProgram(data: Int, programId: Int = 0) {
+        setProgramInput(listOf(data.toLong()), programId)
     }
 
-    suspend fun sendInputToProgram(data: List<Int>) {
-        setAocProgramInputLong(data.map { it.toLong() }, 0)
+    suspend fun sendInputToProgram(data: List<Int>, programId: Int = 0) {
+        setProgramInput(data.map { it.toLong() }, programId)
     }
 
-    suspend fun getOutputFromProgram() = getAocProgramOutputLong(0).map { it.toInt() }
+    suspend fun getFinalOutputFromProgram() = getProgramFinalOutputLong(0).map { it.toInt() }
+    suspend fun getAsyncOutputFromProgram(programId: Int = 0) = getProgramAsyncOutputLong(programId).map { it.toInt() }
 
-    suspend fun getOutputFromProgramLong() = getAocProgramOutputLong(0)
+    suspend fun getFinalOutputFromProgramLong() = getProgramFinalOutputLong(0)
+    suspend fun getAsyncOutputFromProgramLong(programId: Int = 0) = getProgramAsyncOutputLong(programId)
 
     fun programIsRunning() = aocProgramIsRunning(0)
 
@@ -42,11 +38,11 @@ open class AocVm(aocProgram: List<String>,
     }
 
     fun setProgramMemory(address: Int, data: Long) {
-        instanceTable[0].setMemory(address, data)
+        setProgramMemory(0, address, data)
     }
 
     fun setProgramMemory(address: Int, data: Int) {
-        setProgramMemory(0, address, data.toLong())
+        setProgramMemory(address, data.toLong())
     }
 
     fun getProgramMemoryLong(address: Int) = getProgramMemoryLong(0, address)
@@ -57,11 +53,4 @@ open class AocVm(aocProgram: List<String>,
 
     fun getProgramRegister(reg: String) = getProgramRegisterLong(reg).toInt()
 
-    fun setProgramRegister(reg: String, data: Long) {
-        setProgramRegisterLong(0, reg, data)
-    }
-
-    fun setProgramRegister(reg: String, data: Int) {
-        setProgramRegister(reg, data.toLong())
-    }
 }

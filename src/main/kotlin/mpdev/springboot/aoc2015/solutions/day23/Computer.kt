@@ -19,7 +19,7 @@ class Computer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 
         initialiseOpCodes()
         aocVm = AocVm(inputData
             .toMutableList().also { it.add(0, "in a") }.also { it.add("out b") }
-            .map { it.replace(", ", ",").replace(" ", ",") }
+            .map { it.replace(", ", " ") }
         )
     }
 
@@ -29,7 +29,7 @@ class Computer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 
             aocVm.sendInputToProgram(0)
             val job = launch { aocVm.runProgram() }
             aocVm.waitProgram(job)
-            result = aocVm.getOutputFromProgram().last()
+            result = aocVm.getFinalOutputFromProgram().last()
         }
         return result
     }
@@ -40,7 +40,7 @@ class Computer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 
             aocVm.sendInputToProgram(1)
             val job = launch { aocVm.runProgram() }
             aocVm.waitProgram(job)
-            result = aocVm.getOutputFromProgram().last()
+            result = aocVm.getFinalOutputFromProgram().last()
         }
         return result
     }

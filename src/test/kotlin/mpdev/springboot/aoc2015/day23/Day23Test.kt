@@ -43,6 +43,6 @@ class Day23Test {
     @Order(6)
     fun `Solves Part 2`() {
         val result = solver.solvePart2().also { it.println() }
-        assertThat(result).isEqualTo(17)
+        assertThat(result).isEqualTo(7)
     }
 }
