@@ -5,8 +5,7 @@
             <pattern>%d %5p %logger{36} - %m %n</pattern>
         </encoder>
     </appender>
-    <root>
-        <level value="INFO"/>
+    <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
