@@ -12,6 +12,7 @@ class PackageSorting(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
 
     final val packageList = inputData.map { it.toInt() }
 
+    // finds the first grouping of packages - this happens to satisfy the conditions as the packages are sorted
     fun sortPackages(packages: List<Int>, numOfGroups: Int, sumOfGroup: Int, nMin: Int, groupsOfPackages: MutableList<Set<Int>>): Boolean {
         if (numOfGroups == 1) {
             return if  (packages.sum() == sumOfGroup) {
@@ -33,12 +34,13 @@ class PackageSorting(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
         }
     }
 
-    // cache for the various combinations so that they are calculated only once
+    // cache for the various combinations so that they are calculated only once (used in V2)
     val combinationsMap = mutableMapOf<Pair<Int,List<Int>>, List<List<Int>>>()
     fun getCombinations(n: Int, packages: List<Int>, sumOfGroup: Int): List<List<Int>> {
         return combinationsMap.getOrPut(Pair(n, packages)) { packages.combinations(n).toList().filter { group -> group.sum() == sumOfGroup } }
     }
 
+    // finds all groupings that have as first group the group with the least number of packages
     fun sortPackagesV2(packages: List<Int>, numOfGroups: Int, sumOfGroup: Int, nMin: Int,
                        groupsOfPackages: MutableList<Set<Int>>, solutions: MutableList<List<Set<Int>>>, numberOfSolutions: Int):
             Boolean {
