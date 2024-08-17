@@ -17,7 +17,7 @@ class Encryption(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader
         var y = 1
         var currentNumber = 20151125L
         if (debug) currentNumber.println()
-        while (x != coords.x || y !=coords.y) {
+        while (x != coords.x || y != coords.y) {
             if (y == 1) {
                 y = x + 1
                 x = 1
