@@ -41,6 +41,7 @@ class PackageSorting(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
     }
 
     // finds all groupings that have as first group the group with the least number of packages
+    // this version works also with tha packages in any order of size
     fun sortPackagesV2(packages: List<Int>, numOfGroups: Int, sumOfGroup: Int, nMin: Int,
                        groupsOfPackages: MutableList<Set<Int>>, solutions: MutableList<List<Set<Int>>>, numberOfSolutions: Int):
             Boolean {
