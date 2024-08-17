@@ -43,13 +43,33 @@ class Day24Test {
         for (i in input.indices) {
             val result = mutableListOf<Set<Int>>()
             val numOfGroups = input[i]
-            val nMin = ceil(solver.packageList.count().toDouble() / solver.packageList.max()).toInt()
+            val nMin = ceil(solver.packageList.sum().toDouble() / solver.packageList.max()).toInt()
             solver.sortPackages(
                 solver.packageList, numOfGroups = numOfGroups, sumOfGroup = solver.packageList.sum() / numOfGroups,
                 nMin = nMin, result
             ).println()
             result.println()
             assertThat(result[0]).isEqualTo(expected[i])
+        }
+    }
+
+    @Test
+    @Order(3)
+    fun `Finds First combination of packages (recursive) V2`() {
+        val input = listOf(3, 4)
+        val expected = listOf(setOf(9, 11), setOf(4, 11))
+        for (i in input.indices) {
+            solver.combinationsMap.clear()
+            val result: MutableList<List<Set<Int>>> = mutableListOf()
+            val numOfGroups = input[i]
+            val nMin = ceil(solver.packageList.sum().toDouble() / numOfGroups / solver.packageList.max()).toInt()
+            solver.sortPackagesV2(
+                solver.packageList, numOfGroups = numOfGroups, sumOfGroup = solver.packageList.sum() / numOfGroups,
+                nMin = nMin, mutableListOf(), result, 1000
+            ).println()
+            result.sortedWith(PackageSorting.PackageGroupComparator()).println()
+            result.size.println()
+            assertThat(result.sortedWith(PackageSorting.PackageGroupComparator())[0][0]).isEqualTo(expected[i])
         }
     }
 
