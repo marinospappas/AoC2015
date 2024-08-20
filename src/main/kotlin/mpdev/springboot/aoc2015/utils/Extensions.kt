@@ -85,10 +85,6 @@ fun Long.divisors(): Set<Long> {
     return result
 }
 
-fun Int.isPrime() = this.toLong().isPrime()
-
-fun Long.isPrime() = this.divisors().size == 2
-
 fun Long.primeFactors(): Set<List<Long>> {
     var num = this
     val factors = mutableListOf<Long>()
