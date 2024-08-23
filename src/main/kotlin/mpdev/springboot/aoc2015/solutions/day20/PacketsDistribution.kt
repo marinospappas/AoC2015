@@ -5,7 +5,6 @@ import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.PrimeNumbers
 import org.springframework.stereotype.Component
 import kotlin.math.ceil
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 @Component
@@ -15,14 +14,6 @@ class PacketsDistribution(inputDataReader: InputDataReader): PuzzleSolver(inputD
 
     override fun initialize() {
         PrimeNumbers.eratosthenesSieve(10_000_000)
-    }
-    fun sigma(n: Int): Int {
-        var s = 1
-        val primeF = PrimeNumbers.primeFactors(n)
-        for (entry in primeF.entries) {
-            s *= ((entry.key.toDouble().pow(entry.value + 1).toInt() - 1) / (entry.key - 1))
-        }
-        return s
     }
 
     fun findTotalPackets(number: Int) = PrimeNumbers.divisors(number).sum()

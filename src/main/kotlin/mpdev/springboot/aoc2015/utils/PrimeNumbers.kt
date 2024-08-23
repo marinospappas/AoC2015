@@ -1,6 +1,7 @@
 package mpdev.springboot.aoc2015.utils
 
 import kotlin.math.ceil
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 object PrimeNumbers {
@@ -69,6 +70,15 @@ object PrimeNumbers {
             result.addAll(combineWithPrevious)
         }
         return result + 1
+    }
+
+    fun sigma(n: Int): Int {
+        var s = 1
+        val primeF = primeFactors(n)
+        for (entry in primeF.entries) {
+            s *= ((entry.key.toDouble().pow(entry.value + 1).toInt() - 1) / (entry.key - 1))
+        }
+        return s
     }
 
     fun Int.isPrime() =  primes.contains(this)
