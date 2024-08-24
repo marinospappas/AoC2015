@@ -1,6 +1,6 @@
 package mpdev.springboot.aoc2015.solutions.day24
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.AocException
 import mpdev.springboot.aoc2015.utils.combinations
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import kotlin.math.ceil
 
 @Component
-class PackageSorting(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 24) {
+class PackageSorting(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 24) {
 
     final val packageList = inputData.map { it.toInt() }
 

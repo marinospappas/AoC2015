@@ -1,11 +1,12 @@
 package mpdev.springboot.aoc2015.solutions.day01
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import org.springframework.stereotype.Component
 
 @Component
-class ElevatorButtons(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 1) {
+//class ElevatorButtons(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 1) {
+class ElevatorButtons(val inputFileReader: InputFileReader) : PuzzleSolver(inputFileReader, 1) {
 
     lateinit var buttonsList: List<Button>
     var inputValue = inputData[0]

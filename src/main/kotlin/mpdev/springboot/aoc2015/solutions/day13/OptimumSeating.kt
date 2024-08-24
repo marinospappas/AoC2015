@@ -1,13 +1,13 @@
 package mpdev.springboot.aoc2015.solutions.day13
 
 import kotlinx.serialization.Serializable
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.*
 import org.springframework.stereotype.Component
 
 @Component
-class OptimumSeating(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 13) {
+class OptimumSeating(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 13) {
 
     val graph = SGraph<String>()
     lateinit var start: String

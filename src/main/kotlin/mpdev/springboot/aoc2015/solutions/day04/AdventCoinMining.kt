@@ -1,13 +1,14 @@
 package mpdev.springboot.aoc2015.solutions.day04
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
-import mpdev.springboot.aoc2015.utils.*
+import mpdev.springboot.aoc2015.utils.AocException
+import mpdev.springboot.aoc2015.utils.Md5
 import org.springframework.stereotype.Component
 import kotlin.experimental.and
 
 @Component
-class AdventCoinMining(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 4) {
+class AdventCoinMining(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 4) {
 
     var key = inputData[0]
 

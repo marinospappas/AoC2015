@@ -1,11 +1,11 @@
 package mpdev.springboot.aoc2015.solutions.day08
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import org.springframework.stereotype.Component
 
 @Component
-class EscapeCharacters(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 8) {
+class EscapeCharacters(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 8) {
 
     val compiledStrings = inputData.map {
         it.removePrefix("\"").removeSuffix("\"")

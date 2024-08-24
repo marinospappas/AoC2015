@@ -5,7 +5,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.delay
-import mpdev.springboot.aoc2015.utils.aocvm.ProgramState.*
+import mpdev.springboot.aoc2015.utils.aocvm.ProgramState.COMPLETED
+import mpdev.springboot.aoc2015.utils.aocvm.ProgramState.RUNNING
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

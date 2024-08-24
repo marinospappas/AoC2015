@@ -1,7 +1,7 @@
 package mpdev.springboot.aoc2015.solutions.day02
 
 import kotlinx.serialization.Serializable
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.AocInClass
 import mpdev.springboot.aoc2015.utils.AocInField
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 import kotlin.math.min
 
 @Component
-class PresentWrapping(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 2) {
+class PresentWrapping(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 2) {
 
     lateinit var parcels: List<Parcel>
 

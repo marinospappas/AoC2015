@@ -3,12 +3,12 @@ package mpdev.springboot.aoc2015.solutions.day12
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeType
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import org.springframework.stereotype.Component
 
 @Component
-class JsonProcessor(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 12, "json") {
+class JsonProcessor(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 12) {
 
     val jsonInput: JsonNode = ObjectMapper().readTree(inputData.joinToString(""))
 

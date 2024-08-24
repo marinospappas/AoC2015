@@ -1,6 +1,6 @@
 package mpdev.springboot.aoc2015.solutions.day20
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.PrimeNumbers
 import org.springframework.stereotype.Component
@@ -8,7 +8,7 @@ import kotlin.math.ceil
 import kotlin.math.sqrt
 
 @Component
-class PacketsDistribution(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 20) {
+class PacketsDistribution(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 20) {
 
     private final val target = inputData[0].toInt()
 

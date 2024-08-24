@@ -1,6 +1,6 @@
 package mpdev.springboot.aoc2015.day18
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.day18.LightState
 import mpdev.springboot.aoc2015.solutions.day18.LightsAnimation
 import mpdev.springboot.aoc2015.utils.Grid
@@ -14,7 +14,7 @@ class Day18Test {
 
     private val day = 18                                    ///////// Update this for a new dayN test
     private lateinit var solver: LightsAnimation         ///////// Update this for a new dayN test
-    private val inputDataReader = InputDataReader("src/test/resources/inputdata/input")
+    private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
 
     @BeforeEach
     fun setup() {

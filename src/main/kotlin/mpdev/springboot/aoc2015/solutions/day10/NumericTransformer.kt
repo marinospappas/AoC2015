@@ -1,11 +1,11 @@
 package mpdev.springboot.aoc2015.solutions.day10
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import org.springframework.stereotype.Component
 
 @Component
-class NumericTransformer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 10) {
+class NumericTransformer(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 10) {
 
     val startSequence =  inputData[0].toCharArray().toList()
 

@@ -1,6 +1,6 @@
 package mpdev.springboot.aoc2015.day20
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.day20.PacketsDistribution
 import mpdev.springboot.aoc2015.utils.PrimeNumbers
 import mpdev.springboot.aoc2015.utils.divisors
@@ -18,7 +18,7 @@ class Day20Test {
 
     private val day = 20                                    ///////// Update this for a new dayN test
     private lateinit var solver: PacketsDistribution         ///////// Update this for a new dayN test
-    private val inputDataReader = InputDataReader("src/main/resources/inputdata/input")
+    private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
 
     @BeforeEach
     fun setup() {

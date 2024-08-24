@@ -1,6 +1,6 @@
 package mpdev.springboot.aoc2015.day05
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.day05.StringsInspection
 import mpdev.springboot.aoc2015.utils.containsSeqTwice
 import mpdev.springboot.aoc2015.utils.isVowel
@@ -16,7 +16,7 @@ class Day05Test {
 
     private val day = 5                                     ///////// Update this for a new dayN test
     private lateinit var solver: StringsInspection         ///////// Update this for a new dayN test
-    private val inputDataReader = InputDataReader("src/test/resources/inputdata/input")
+    private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
 
     @BeforeEach
     fun setup() {

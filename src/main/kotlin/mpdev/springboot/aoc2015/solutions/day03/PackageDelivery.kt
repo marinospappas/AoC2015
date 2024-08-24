@@ -1,13 +1,13 @@
 package mpdev.springboot.aoc2015.solutions.day03
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.GridUtils
 import mpdev.springboot.aoc2015.utils.Point
 import org.springframework.stereotype.Component
 
 @Component
-class PackageDelivery(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 3) {
+class PackageDelivery(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 3) {
 
     lateinit var directions: List<GridUtils.Direction>
 

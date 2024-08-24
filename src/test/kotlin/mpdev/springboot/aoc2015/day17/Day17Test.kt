@@ -1,6 +1,6 @@
 package mpdev.springboot.aoc2015.day17
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.day17.Containerisation
 import mpdev.springboot.aoc2015.utils.println
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +12,7 @@ class Day17Test {
 
     private val day = 17                                    ///////// Update this for a new dayN test
     private lateinit var solver: Containerisation         ///////// Update this for a new dayN test
-    private val inputDataReader = InputDataReader("src/test/resources/inputdata/input")
+    private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
 
     @BeforeEach
     fun setup() {

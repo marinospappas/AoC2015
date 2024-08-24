@@ -1,13 +1,13 @@
 package mpdev.springboot.aoc2015.solutions.day07
 
 import kotlinx.serialization.Serializable
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.*
 import org.springframework.stereotype.Component
 
 @Component
-class DigitalCircuit(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 7) {
+class DigitalCircuit(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 7) {
 
     lateinit var circuit: Node
     var gatesMap = mapOf<String, Node>()

@@ -1,13 +1,13 @@
 package mpdev.springboot.aoc2015.solutions.day25
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.Point
 import mpdev.springboot.aoc2015.utils.println
 import org.springframework.stereotype.Component
 
 @Component
-class Encryption(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 25) {
+class Encryption(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 25) {
 
     val coords = inputData.map {val a =it.split(","); Point(a[1].toInt(), a[0].toInt()) }.first()
     var debug = false

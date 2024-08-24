@@ -1,13 +1,13 @@
 package mpdev.springboot.aoc2015.solutions.day16
 
 import kotlinx.serialization.Serializable
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.*
 import org.springframework.stereotype.Component
 
 @Component
-class IdentifyItem(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 16) {
+class IdentifyItem(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 16) {
 
     lateinit var items: List<Item>
 

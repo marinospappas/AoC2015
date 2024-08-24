@@ -1,13 +1,16 @@
 package mpdev.springboot.aoc2015.solutions.day14
 
 import kotlinx.serialization.Serializable
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
-import mpdev.springboot.aoc2015.utils.*
+import mpdev.springboot.aoc2015.utils.AocInClass
+import mpdev.springboot.aoc2015.utils.AocInField
+import mpdev.springboot.aoc2015.utils.AocInReplacePatterns
+import mpdev.springboot.aoc2015.utils.InputUtils
 import org.springframework.stereotype.Component
 
 @Component
-class SpeedRace(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 14) {
+class SpeedRace(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 14) {
 
     lateinit var racers: List<Racer>
     var raceTime = 2503

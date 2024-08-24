@@ -1,13 +1,13 @@
 package mpdev.springboot.aoc2015.solutions.day09
 
 import kotlinx.serialization.Serializable
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.*
 import org.springframework.stereotype.Component
 
 @Component
-class ShortestRoute(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 9) {
+class ShortestRoute(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 9) {
 
     val graph = SGraph<String>()
 

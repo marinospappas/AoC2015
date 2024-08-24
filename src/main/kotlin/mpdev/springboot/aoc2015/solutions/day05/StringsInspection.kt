@@ -1,12 +1,13 @@
 package mpdev.springboot.aoc2015.solutions.day05
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
-import mpdev.springboot.aoc2015.utils.*
+import mpdev.springboot.aoc2015.utils.containsSeqTwice
+import mpdev.springboot.aoc2015.utils.isVowel
 import org.springframework.stereotype.Component
 
 @Component
-class StringsInspection(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 5) {
+class StringsInspection(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 5) {
 
     var strings = inputData
 

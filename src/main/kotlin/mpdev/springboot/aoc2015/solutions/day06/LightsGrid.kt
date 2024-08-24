@@ -1,14 +1,14 @@
 package mpdev.springboot.aoc2015.solutions.day06
 
 import kotlinx.serialization.Serializable
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.*
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class LightsGrid(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 6) {
+class LightsGrid(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 6) {
 
     lateinit var instructions: List<Triple<Instruction, Point, Point>>
     val lights = Array(1000) { Array(1000) { 0 } }

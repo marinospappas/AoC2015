@@ -1,21 +1,17 @@
 package mpdev.springboot.aoc2015.solutions
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.model.PuzzlePartSolution
 import mpdev.springboot.aoc2015.model.PuzzleSolution
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.system.measureTimeMillis
 
-abstract class PuzzleSolver(inputDataReader: InputDataReader, val day: Int, inputFileExtension: String = "txt") {
+abstract class PuzzleSolver(inputFileReader: InputFileReader, val day: Int) {
 
     protected val log: Logger = LoggerFactory.getLogger(this::class.java)
 
-    val inputData: List<String>
-
-    init {
-        inputData = inputDataReader.read(day, inputFileExtension)
-    }
+    var inputData: List<String> = inputFileReader.getInput(day)
 
     fun solve(): PuzzleSolution {
         log.info("solver for day {} called", day)

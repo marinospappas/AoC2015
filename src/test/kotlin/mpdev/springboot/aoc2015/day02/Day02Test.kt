@@ -1,6 +1,6 @@
 package mpdev.springboot.aoc2015.day02
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.day02.PresentWrapping
 import mpdev.springboot.aoc2015.utils.println
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +12,7 @@ class Day02Test {
 
     private val day = 2                                     ///////// Update this for a new dayN test
     private lateinit var solver: PresentWrapping         ///////// Update this for a new dayN test
-    private val inputDataReader = InputDataReader("src/test/resources/inputdata/input")
+    private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
 
     @BeforeEach
     fun setup() {

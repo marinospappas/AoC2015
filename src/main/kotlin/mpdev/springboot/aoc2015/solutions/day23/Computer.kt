@@ -2,16 +2,17 @@ package mpdev.springboot.aoc2015.solutions.day23
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.aocvm.AocVm
 import mpdev.springboot.aoc2015.utils.aocvm.InstructionSet
 import mpdev.springboot.aoc2015.utils.aocvm.OpResultCode
-import mpdev.springboot.aoc2015.utils.aocvm.ParamReadWrite.*
+import mpdev.springboot.aoc2015.utils.aocvm.ParamReadWrite.R
+import mpdev.springboot.aoc2015.utils.aocvm.ParamReadWrite.W
 import org.springframework.stereotype.Component
 
 @Component
-class Computer(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 23) {
+class Computer(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 23) {
 
     lateinit var aocVm: AocVm
 

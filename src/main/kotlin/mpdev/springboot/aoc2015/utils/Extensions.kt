@@ -1,6 +1,5 @@
 package mpdev.springboot.aoc2015.utils
 
-import java.lang.StringBuilder
 import kotlin.math.abs
 import kotlin.math.min
 

@@ -2,7 +2,9 @@ package mpdev.springboot.aoc2015.utils.aocvm
 
 import mpdev.springboot.aoc2015.utils.AocException
 import mpdev.springboot.aoc2015.utils.aocvm.OpResultCode.*
-import mpdev.springboot.aoc2015.utils.aocvm.ParamReadWrite.*
+import mpdev.springboot.aoc2015.utils.aocvm.ParamReadWrite.R
+import mpdev.springboot.aoc2015.utils.aocvm.ParamReadWrite.W
+
 abstract class InstructionSet {
 
     data class OpCode(val code: String, val numberOfParams: Int, val paramMode: List<ParamReadWrite>, val execute: (List<Any>) -> Pair<OpResultCode, List<Any>>)

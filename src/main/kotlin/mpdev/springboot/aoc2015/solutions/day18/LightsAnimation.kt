@@ -1,13 +1,13 @@
 package mpdev.springboot.aoc2015.solutions.day18
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.Grid
 import mpdev.springboot.aoc2015.utils.Point
 import org.springframework.stereotype.Component
 
 @Component
-class LightsAnimation(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 18) {
+class LightsAnimation(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 18) {
 
     var grid = Grid(inputData, LightState.mapper, border = 0, defaultSize = Pair(inputData[0].length, inputData.size))
     var repeatAnimation = 100

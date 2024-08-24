@@ -1,12 +1,12 @@
 package mpdev.springboot.aoc2015.solutions.day11
 
-import mpdev.springboot.aoc2015.input.InputDataReader
+import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.AocException
 import org.springframework.stereotype.Component
 
 @Component
-class PasswordGenerator(inputDataReader: InputDataReader): PuzzleSolver(inputDataReader, 11) {
+class PasswordGenerator(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 11) {
 
     var initialString = inputData[0]
 
