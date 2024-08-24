@@ -12,7 +12,7 @@ class Day16Test {
 
     private val day = 16                                   ///////// Update this for a new dayN test
     private lateinit var solver: IdentifyItem         ///////// Update this for a new dayN test
-    private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+    private val inputDataReader = InputFileReader("src/main/resources/inputdata/")
 
     @BeforeEach
     fun setup() {
