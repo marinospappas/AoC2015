@@ -4,6 +4,7 @@ import mpdev.springboot.aoc2015.input.InputDataReader
 import mpdev.springboot.aoc2015.solutions.day20.PacketsDistribution
 import mpdev.springboot.aoc2015.utils.PrimeNumbers
 import mpdev.springboot.aoc2015.utils.divisors
+import mpdev.springboot.aoc2015.utils.print
 import mpdev.springboot.aoc2015.utils.println
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -29,33 +30,39 @@ class Day20Test {
     @Order(1)
     fun `Sets Day correctly`() {
         assertThat(solver.day).isEqualTo(day)
-        PrimeNumbers.eratosthenesSieve(1000)
-        PrimeNumbers.primes.println()
     }
 
     @Test
     @Order(1)
     fun `Calculates Prime Numbers`() {
         val elapsed = measureTimeMillis {
-            PrimeNumbers.eratosthenesSieve0(100_000)
+            PrimeNumbers.eratosthenesSieve0(1_000_000)
         }
-        PrimeNumbers.primes.also { it.println() }
-        kotlin.io.println()
-        elapsed.println()
+        PrimeNumbers.primes.subList(0, 100).print(); println(" ...")
+        println("time to calculate primes up to 1,000,000: $elapsed msec")
+        assertThat(PrimeNumbers.primes).hasSize(78498)
+    }
+
+    @Test
+    @Order(1)
+    fun `Finds Divisors using Prime factors`() {
+        PrimeNumbers.eratosthenesSieve0(1_000_000)
         PrimeNumbers.primeFactors(677376).println()
-        solver.sigma(677376).println()
-        677376.divisors().sum().println()
-        PrimeNumbers.divisors(677376).sum().println()
-        PrimeNumbers.divisors2(677376).sum().println()
-        677376.divisors().sorted().println()
-        PrimeNumbers.divisors(677376).sorted().println()
-        PrimeNumbers.divisors2(677376).sorted().println()
+        val divisors = PrimeNumbers.divisors(677376).sorted().also { it.println() }
+        val divisors2 = PrimeNumbers.divisors2(677376).sorted().also { it.println() }
+        val expDivisors = 677376.divisors().toList().also { it.println() }
+        PrimeNumbers.sigma(677376).println()
+        assertThat(divisors).isEqualTo(expDivisors)
+        assertThat(divisors2).isEqualTo(expDivisors)
+        assertThat(PrimeNumbers.sigma(677376)).isEqualTo(expDivisors.sum())
     }
 
     @ParameterizedTest
-    @CsvSource(value = ["1", "2", "3", "4", "5", "6", "7", "8", "9"])
+    @CsvSource(value = ["1, 1", "2, 3", "3, 4", "4, 7", "5, 6", "6, 12", "7, 8", "8, 15", "9, 13"])
     @Order(2)
-    fun `Calculates number of packages`(n: Int) {
-        solver.findTotalPackets(n).println()
+    fun `Calculates sums of divisors`(n: Int, expected: Int) {
+        PrimeNumbers.divisors(n).print(); print(" ")
+        assertThat(solver.findSumOfDivisors(n).also { it.println() }).isEqualTo(expected)
+        assertThat(PrimeNumbers.sigma(n)).isEqualTo(expected)
     }
 }

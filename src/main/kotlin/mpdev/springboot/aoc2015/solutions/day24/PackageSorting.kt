@@ -21,7 +21,7 @@ class PackageSorting(inputDataReader: InputDataReader): PuzzleSolver(inputDataRe
             } else
                 false
         } else {
-            val nMax = packages.size - (numOfGroups - 1) * nMin
+            val nMax = packages.size - nMin - (numOfGroups - 1)
             for (n in nMin .. nMax) {
                 packages.combinations(n).forEach { group ->
                     if (group.sum() == sumOfGroup) {

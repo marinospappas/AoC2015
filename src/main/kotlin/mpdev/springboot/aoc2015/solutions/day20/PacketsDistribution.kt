@@ -16,7 +16,7 @@ class PacketsDistribution(inputDataReader: InputDataReader): PuzzleSolver(inputD
         PrimeNumbers.eratosthenesSieve(10_000_000)
     }
 
-    fun findTotalPackets(number: Int) = PrimeNumbers.divisors(number).sum()
+    fun findSumOfDivisors(number: Int) = PrimeNumbers.divisors(number).sum()
 
     fun findTotalPackets2(number: Int): Int {
         var result = 0
@@ -38,7 +38,7 @@ class PacketsDistribution(inputDataReader: InputDataReader): PuzzleSolver(inputD
     override fun solvePart1(): Int {
         var n = 1
         val upperLimit = target / 10
-        while (findTotalPackets(n) < upperLimit)
+        while (findSumOfDivisors(n) < upperLimit)
             ++n
         return n
     }

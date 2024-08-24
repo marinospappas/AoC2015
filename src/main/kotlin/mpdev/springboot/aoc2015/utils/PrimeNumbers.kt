@@ -39,9 +39,9 @@ object PrimeNumbers {
         return pFactors
     }
 
-    fun divisors(number: Int): List<Int> {
+    fun divisors(number: Int): Set<Int> {
         val upperLimit = ceil(sqrt(number.toDouble())).toInt()
-        val result = mutableListOf<Int>()
+        val result = mutableSetOf<Int>()
         for (d in 1 .. upperLimit) {
             if (number % d == 0) {
                 result.add(d)

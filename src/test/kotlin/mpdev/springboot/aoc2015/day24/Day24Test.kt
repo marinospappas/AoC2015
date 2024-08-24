@@ -43,12 +43,13 @@ class Day24Test {
         for (i in input.indices) {
             val result = mutableListOf<Set<Int>>()
             val numOfGroups = input[i]
-            val nMin = ceil(solver.packageList.sum().toDouble() / solver.packageList.max()).toInt()
+            val nMin = ceil(solver.packageList.sum().toDouble() / numOfGroups / solver.packageList.max()).toInt()
             solver.sortPackages(
                 solver.packageList, numOfGroups = numOfGroups, sumOfGroup = solver.packageList.sum() / numOfGroups,
                 nMin = nMin, result
             ).println()
             result.println()
+            assertThat(result).isNotEmpty()
             assertThat(result[0]).isEqualTo(expected[i])
         }
     }
@@ -69,6 +70,7 @@ class Day24Test {
             ).println()
             result.sortedWith(PackageSorting.PackageGroupComparator()).println()
             result.size.println()
+            assertThat(result).isNotEmpty()
             assertThat(result.sortedWith(PackageSorting.PackageGroupComparator())[0][0]).isEqualTo(expected[i])
         }
     }
