@@ -11,8 +11,12 @@ import org.junit.jupiter.api.Test
 class Day08Test {
 
     private val day = 8                                    ///////// Update this for a new dayN test
-    private lateinit var solver: EscapeCharacters         ///////// Update this for a new dayN test
+    private var solver: EscapeCharacters         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = EscapeCharacters(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {

@@ -13,12 +13,15 @@ import org.junit.jupiter.params.provider.CsvSource
 class Day11Test {
 
     private val day = 11                                    ///////// Update this for a new dayN test
-    private lateinit var solver: PasswordGenerator         ///////// Update this for a new dayN test
+    private var solver: PasswordGenerator         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = PasswordGenerator(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = PasswordGenerator(inputDataReader)
         solver.initialize()
     }
 

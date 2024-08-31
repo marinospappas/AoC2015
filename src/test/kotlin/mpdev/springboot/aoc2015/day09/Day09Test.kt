@@ -11,8 +11,12 @@ import org.junit.jupiter.api.Test
 class Day09Test {
 
     private val day = 9                                    ///////// Update this for a new dayN test
-    private lateinit var solver: ShortestRoute         ///////// Update this for a new dayN test
+    private var solver: ShortestRoute         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = ShortestRoute(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {

@@ -40,8 +40,8 @@ abstract class InstructionSet {
             JNZ to OpCode(JNZ, 2, listOf(R, R)) { a -> if (a[0] as Long != 0L) Pair(INCR_PC, listOf(a[1] as Long)) else Pair(NONE, listOf()) },
             IN to OpCode(IN, 1, listOf(W)) { a -> Pair(INPUT, listOf(a[0])) },
             OUT to OpCode(OUT, 1, listOf(R)) { a -> Pair(OUTPUT, listOf(a[0] as Long)) },
-            NOP to OpCode(NOP, 0, listOf()) { a -> Pair(NONE, listOf()) },
-            HLT to OpCode(HLT, 0, listOf()) { a -> Pair(EXIT, listOf()) }
+            NOP to OpCode(NOP, 0, listOf()) { _ -> Pair(NONE, listOf()) },
+            HLT to OpCode(HLT, 0, listOf()) { _ -> Pair(EXIT, listOf()) }
         )
 
         fun getOpCode(opCode: String) = opCodesList[opCode] ?: throw AocException("no OpCode found for $opCode")

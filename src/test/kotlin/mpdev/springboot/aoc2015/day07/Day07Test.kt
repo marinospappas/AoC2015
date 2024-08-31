@@ -13,12 +13,15 @@ import org.junit.jupiter.params.provider.CsvSource
 class Day07Test {
 
     private val day = 7                                    ///////// Update this for a new dayN test
-    private lateinit var solver: DigitalCircuit         ///////// Update this for a new dayN test
+    private var solver: DigitalCircuit         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = DigitalCircuit(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = DigitalCircuit(inputDataReader)
         solver.initialize()
     }
 

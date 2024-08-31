@@ -12,8 +12,12 @@ import org.junit.jupiter.api.Test
 class Day12Test {
 
     private val day = 12                                    ///////// Update this for a new dayN test
-    private lateinit var solver: JsonProcessor         ///////// Update this for a new dayN test
+    private var solver: JsonProcessor         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = JsonProcessor(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {

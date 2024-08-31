@@ -12,12 +12,15 @@ import kotlin.math.ceil
 class Day24Test {
 
     private val day = 24                                    ///////// Update this for a new dayN test
-    private lateinit var solver: PackageSorting         ///////// Update this for a new dayN test
+    private var solver: PackageSorting         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = PackageSorting(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = PackageSorting(inputDataReader)
         solver.initialize()
     }
 

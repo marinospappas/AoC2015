@@ -11,12 +11,15 @@ import org.junit.jupiter.api.Test
 class Day06Test {
 
     private val day = 6                                    ///////// Update this for a new dayN test
-    private lateinit var solver: LightsGrid         ///////// Update this for a new dayN test
+    private var solver: LightsGrid         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = LightsGrid(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = LightsGrid(inputDataReader)
         solver.initialize()
     }
 

@@ -11,12 +11,15 @@ import org.junit.jupiter.api.Test
 class Day15Test {
 
     private val day = 15                                   ///////// Update this for a new dayN test
-    private lateinit var solver: Recipe         ///////// Update this for a new dayN test
+    private var solver: Recipe         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = Recipe(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = Recipe(inputDataReader)
         solver.initialize()
     }
 

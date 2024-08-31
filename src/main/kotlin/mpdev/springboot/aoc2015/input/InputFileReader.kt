@@ -14,23 +14,23 @@ import java.io.StringReader
 
 
 @Component
-class InputFileReader(@Value("\${input.files.dir}") val inputFilesDir: String) {
+class InputFileReader(@Value("\${input.files.dir}") inputFilesDir: String) {
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(this::class.java)
         var inputProcessingComplete = false
+        val inputData = mutableMapOf<Int, List<String>>()
     }
 
-    final val inputData = mutableMapOf<Int, List<String>>()
-
-    private final val ctx: CamelContext = DefaultCamelContext()
-    private final val inputRoute = InputRouteBuilder(inputFilesDir, inputData)
+    private val ctx: CamelContext = DefaultCamelContext()
+    private val inputRoute = InputRouteBuilder(inputFilesDir, inputData)
 
     init {
         ctx.addRoutes(inputRoute)
         ctx.start()
         while (!inputProcessingComplete)
             Thread.sleep(10)
+        Thread.sleep(100)
         log.info("Completed reading of input files via Camel route, read ${inputData.size} days")
         ctx.stop()
     }

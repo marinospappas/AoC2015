@@ -17,12 +17,15 @@ import kotlin.system.measureTimeMillis
 class Day20Test {
 
     private val day = 20                                    ///////// Update this for a new dayN test
-    private lateinit var solver: PacketsDistribution         ///////// Update this for a new dayN test
+    private var solver: PacketsDistribution         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = PacketsDistribution(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = PacketsDistribution(inputDataReader)
         solver.initialize()
     }
 

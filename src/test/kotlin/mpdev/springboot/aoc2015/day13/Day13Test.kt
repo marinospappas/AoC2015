@@ -11,12 +11,15 @@ import org.junit.jupiter.api.Test
 class Day13Test {
 
     private val day = 13                                   ///////// Update this for a new dayN test
-    private lateinit var solver: OptimumSeating         ///////// Update this for a new dayN test
+    private var solver: OptimumSeating         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = OptimumSeating(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = OptimumSeating(inputDataReader)
         solver.initialize()
     }
 

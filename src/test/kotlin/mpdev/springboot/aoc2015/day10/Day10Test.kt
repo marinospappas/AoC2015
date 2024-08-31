@@ -11,12 +11,15 @@ import org.junit.jupiter.api.Test
 class Day10Test {
 
     private val day = 10                                    ///////// Update this for a new dayN test
-    private lateinit var solver: NumericTransformer         ///////// Update this for a new dayN test
+    private var solver: NumericTransformer         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = NumericTransformer(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = NumericTransformer(inputDataReader)
         solver.initialize()
     }
 

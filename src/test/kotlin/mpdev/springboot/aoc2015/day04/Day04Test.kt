@@ -11,12 +11,15 @@ import org.junit.jupiter.api.Test
 class Day04Test {
 
     private val day = 4                                     ///////// Update this for a new dayN test
-    private lateinit var solver: AdventCoinMining         ///////// Update this for a new dayN test
+    private var solver: AdventCoinMining         ///////// Update this for a new dayN test
     private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+
+    init {
+        solver = AdventCoinMining(inputDataReader)
+    }
 
     @BeforeEach
     fun setup() {
-        solver = AdventCoinMining(inputDataReader)
         solver.initialize()
     }
 
