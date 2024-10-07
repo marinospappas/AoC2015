@@ -1,6 +1,7 @@
 package mpdev.springboot.aoc2015.day19
 
 import mpdev.springboot.aoc2015.input.InputFileReader
+import mpdev.springboot.aoc2015.solutions.day19.Element
 import mpdev.springboot.aoc2015.solutions.day19.Transformations
 import mpdev.springboot.aoc2015.utils.println
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +13,7 @@ class Day19Test {
 
     private val day = 19                                    ///////// Update this for a new dayN test
     private var solver: Transformations         ///////// Update this for a new dayN test
-    private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
+    private val inputDataReader = InputFileReader("src/main/resources/inputdata/")
 
     init {
         solver = Transformations(inputDataReader)
@@ -33,9 +34,14 @@ class Day19Test {
     @Order(2)
     fun `Reads transformation rules and main molecule`() {
         solver.rules.forEach { it.println() }
+        println("Rn - Ar rules")
+        solver.rulesRnAr.forEach { it.println() }
+        println("non - Rn - Ar rules")
+        solver.rulesNonRnAr.forEach { it.println() }
         println(solver.mainMolecule)
+        println(solver.mainMolecule.toString(0))
         assertThat(solver.rules).hasSize(3)
-        assertThat(solver.mainMolecule).isEqualTo("HOH")
+        assertThat(solver.mainMolecule.elements).isEqualTo(listOf(Element.H, Element.O, Element.H))
     }
 
     @Test
@@ -53,7 +59,21 @@ class Day19Test {
     }
 
     @Test
+    @Order(5)
+    fun `Finds last Rn-Ar part`() {
+        val result = solver.mainMolecule.indexOfLastRnAr().also { it.println() }
+        println(solver.mainMolecule.toString(result.first - 1, result.second))
+        assertThat(result).isEqualTo(Pair(7, 10))
+    }
+
+    @Test
     @Order(6)
+    fun `Reverse-transforms molecule`() {
+        val result = solver.reverseTransformation()
+    }
+
+    @Test
+    @Order(7)
     fun `Solves Part 2`() {
         val result = solver.solvePart2().also { it.println() }
         assertThat(result).isEqualTo(17)
