@@ -8,12 +8,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import kotlin.io.path.Path
 
 class Day19Test {
 
     private val day = 19                                    ///////// Update this for a new dayN test
     private var solver: Transformations         ///////// Update this for a new dayN test
-    private val inputDataReader = InputFileReader("src/main/resources/inputdata/")
+    private val inputDataReader = InputFileReader("src/test/resources/inputdata/")
 
     init {
         solver = Transformations(inputDataReader)
@@ -21,6 +23,7 @@ class Day19Test {
 
     @BeforeEach
     fun setup() {
+        inputDataReader.setTestInput(day, Files.readAllLines(Path("src/test/resources/inputdata/input${day}.txt")))
         solver.initialize()
     }
 
@@ -60,22 +63,21 @@ class Day19Test {
 
     @Test
     @Order(5)
-    fun `Finds last Rn-Ar part`() {
-        val result = solver.mainMolecule.indexOfLastRnAr().also { it.println() }
-        println(solver.mainMolecule.toString(result.first - 1, result.second))
-        assertThat(result).isEqualTo(Pair(7, 10))
-    }
-
-    @Test
-    @Order(6)
     fun `Reverse-transforms molecule`() {
-        val result = solver.reverseTransformation()
+        inputDataReader.setTestInput(day, Files.readAllLines(Path("src/main/resources/inputdata/input${day}.txt")))
+        val solver1 = Transformations(inputDataReader)
+        solver1.initialize()
+        solver1.findReverseTransformations()
+        solver1.transformationCount.println()
     }
 
     @Test
     @Order(7)
     fun `Solves Part 2`() {
-        val result = solver.solvePart2().also { it.println() }
-        assertThat(result).isEqualTo(17)
+        inputDataReader.setTestInput(day, Files.readAllLines(Path("src/main/resources/inputdata/input${day}.txt")))
+        val solver1 = Transformations(inputDataReader)
+        solver1.initialize()
+        val result = solver1.solvePart2().also { it.println() }
+        assertThat(result).isEqualTo(195)
     }
 }

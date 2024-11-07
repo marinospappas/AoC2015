@@ -5,6 +5,7 @@ import mpdev.springboot.aoc2015.input.InputFileReader
 import mpdev.springboot.aoc2015.solutions.PuzzleSolver
 import mpdev.springboot.aoc2015.utils.*
 import org.springframework.stereotype.Component
+import kotlin.random.Random
 
 @Component
 class Transformations(inputFileReader: InputFileReader): PuzzleSolver(inputFileReader, 19) {
@@ -14,6 +15,7 @@ class Transformations(inputFileReader: InputFileReader): PuzzleSolver(inputFileR
     final val rules: List<Pair<Element, List<Element>>> = aocInputList.map { Pair(Element.valueOf(it.from), it.to.toElementsList()) }
     final val rulesRnAr: List<Pair<Element, List<Element>>> = rules.filter { rule -> rule.second.contains(Element.Rn) }
     final val rulesNonRnAr: List<Pair<Element, List<Element>>> = rules - rulesRnAr.toSet()
+    var transformationCount = -1
 
     fun findAllTransformations(): Set<Molecule> {
         val transformations = mutableSetOf<Molecule>()
@@ -30,29 +32,29 @@ class Transformations(inputFileReader: InputFileReader): PuzzleSolver(inputFileR
         return transformations
     }
 
-    fun reverseTransformation() {
-        var molecule = mainMolecule
+    fun findReverseTransformations() {
         var count = 0
-        while (molecule.elements != listOf(Element.e)) {
-            var rnArIndx = molecule.indexOfLastRnAr()
-            var newMolecule = Molecule(molecule.elements)
-            molecule = Molecule(listOf())
-            if (rnArIndx != Pair(-1, -1)) {
-                while (newMolecule != molecule) {
-                    molecule = newMolecule
-                    molecule.println()
-                    newMolecule = molecule.applyRulesReverse(rulesNonRnAr, rnArIndx.first + 1, rnArIndx.second - 1)
-                    ++count
-                    rnArIndx = molecule.indexOfLastRnAr()
-                }
-                molecule.println()
-                molecule = molecule.applyRulesReverse(rulesRnAr, rnArIndx.first - 1, rnArIndx.second)
-                ++count
-                molecule.println()
-            }
+        do {
+            val molecule = tryTransform(0, mainMolecule, rules)
+            log.info("attempt ${++count} returned $molecule")
         }
-        molecule = molecule.applyRulesReverse(rulesNonRnAr, 0, molecule.size())
-        molecule.println()
+        while (molecule.elements != listOf(Element.e))
+    }
+
+    fun tryTransform(level: Int, molecule: Molecule, rules: List<Pair<Element, List<Element>>>): Molecule {
+        if (molecule.elements == listOf(Element.e)) {
+            transformationCount = level
+            return molecule
+        }
+        var newMolecule = Molecule.from(molecule)
+        val currentRules = rules.toMutableList()
+        while (newMolecule == molecule) {
+            val thisRule = currentRules.removeAt(Random.nextInt(currentRules.size))
+            newMolecule = molecule.applyRuleReverse(thisRule)
+            if (currentRules.isEmpty())
+                return newMolecule
+        }
+        return tryTransform(level + 1, newMolecule, rules)
     }
 
     override fun solvePart1(): Int {
@@ -60,9 +62,13 @@ class Transformations(inputFileReader: InputFileReader): PuzzleSolver(inputFileR
     }
 
     override fun solvePart2(): Int {
-        val elements = mainMolecule.elements
-        return elements.count() - elements.count{ it == Element.Rn } - elements.count{ it == Element.Ar } -
-                2 * elements.count{ it == Element.Y } - 1
+        // alternative solution using formula without actually performing reverse transformations
+        // val elements = mainMolecule.elements
+        // return elements.count() - elements.count{ it == Element.Rn } - elements.count{ it == Element.Ar } - 2 * elements.count{ it == Element.Y } - 1
+
+        // solution using reverse transformations
+        findReverseTransformations()
+        return transformationCount
     }
 
     private final fun String.toElementsList(): List<Element> {
@@ -96,7 +102,7 @@ enum class Element {
     Rn, Ar, e
 }
 
-data class Molecule(val elements: List<Element>) {
+data class Molecule(val elements: List<Element> = emptyList()) {
 
     fun size() = elements.size
 
@@ -106,39 +112,23 @@ data class Molecule(val elements: List<Element>) {
     fun transform(index1: Int, index2: Int, newElements: List<Element>): Molecule
         = Molecule(elements.subList(0, index1) + newElements + elements.subList(index2, elements.size))
 
-    fun applyRulesReverse(rules: List<Pair<Element, List<Element>>>, index1: Int, index2: Int): Molecule {
+    fun applyRuleReverse(rule: Pair<Element, List<Element>>): Molecule {
         var molecule = this
-        var endIndex = index2
-        while (endIndex > index1) {
-            for (rule in rules) {
-                if (endIndex - rule.second.size < index1)
-                    continue
-                if (matches(endIndex - rule.second.size, rule.second)) {
-                    molecule = transform(endIndex - rule.second.size, endIndex, listOf(rule.first))
-                    return molecule
-                }
+        for (index in elements.indices) {
+            if (index + rule.second.size > elements.size)
+                    break
+            if (matches(index, rule.second)) {
+                molecule = transform(index, index + rule.second.size, listOf(rule.first))
+                return molecule
             }
-            --endIndex
         }
         return molecule
     }
 
-    fun indexOfLastRnAr(): Pair<Int, Int> {
-        var index1 = -1
-        var index2 = -1
-        for (i in elements.lastIndex downTo 0) {
-            if (elements[i] == Element.Ar) {
-                index2 = i + 1
-            } else {
-                if (index2 >= 0 && elements[i] == Element.Rn) {
-                    index1 = i
-                    break
-                }
-            }
-        }
-        return Pair(index1, index2)
-    }
-
     fun toString(index1: Int = 0, index2: Int = elements.size) =
         "elements [" + elements.subList(index1, index2).joinToString("") + "]"
+
+    companion object {
+        fun from(molecule: Molecule): Molecule = Molecule(molecule.elements)
+    }
 }
