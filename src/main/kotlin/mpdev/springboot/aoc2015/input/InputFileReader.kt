@@ -39,6 +39,10 @@ class InputFileReader(@Value("\${input.files.dir}") inputFilesDir: String) {
         return inputData[day] ?: throw AocException("Could not find input for day $day")
     }
 
+    fun setTestInput(day: Int, data: List<String>) {
+        inputData[day] = data
+    }
+
     class InputRouteBuilder(private val inputFilesDir: String, val inputData: MutableMap<Int, List<String>>): RouteBuilder() {
         var day = 0
         override fun configure() {
